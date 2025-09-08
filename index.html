@@ -542,8 +542,8 @@
             const forecastCtx = document.getElementById('forecastChart').getContext('2d');
             forecastChart = new Chart(forecastCtx, { type: 'line', data: { datasets: []}, options: { responsive: true, maintainAspectRatio: false, scales: { x: { type: 'time', time: { unit: 'month' }, grid: { display: false } }, y: { beginAtZero: true, ticks: { callback: (v) => `₹${(v/100000).toFixed(0)}L` } } }, 
             interaction: {
-                mode: 'nearest',
-                intersect: true
+                mode: 'index', 
+                intersect: false // This is the fix for the tooltip
             }, 
             plugins: { tooltip: { callbacks: { label: c => `${c.dataset.label}: ${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(c.parsed.y)}` } }, annotation: { annotations: {} } } } });
         }
