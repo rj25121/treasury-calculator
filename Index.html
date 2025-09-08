@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Export Treasury Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #F9FAFB;
+            --color-text: #1F2937;
+            --color-primary: #85583F;
+            --color-secondary: #C08A6A;
+            --color-accent: #F3EADD;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--color-text);
+        }
+        .nav-button.active {
+            background-color: var(--color-primary);
+            color: #FFFFFF;
+        }
+        .selector-button.active {
+            background-color: var(--color-secondary);
+            color: #FFFFFF;
+            border-color: var(--color-secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .accordion-header.open {
+            background-color: var(--color-accent);
+        }
+        .accordion-content {
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+            max-height: 0;
+            overflow: hidden;
+        }
+        .card {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .mobile-nav-scroller::-webkit-scrollbar { display: none; }
+        .mobile-nav-scroller { -ms-overflow-style: none; scrollbar-width: none; }
+        .timeline-track {
+            position: relative;
+            width: 100%;
+            height: 12px;
+            background-color: #E5E7EB;
+            border-radius: 6px;
+        }
+        .timeline-segment {
+            position: absolute;
+            height: 100%;
+            border-radius: 6px;
+            background-image: linear-gradient(to right, var(--tw-gradient-stops));
+        }
+        .timeline-label-container {
+            position: relative;
+            width: 100%;
+            height: 50px;
+        }
+        .timeline-label {
+            position: absolute;
+            top: 25px;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        .timeline-label::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 8px;
+            background-color: #9CA3AF;
+        }
+         .event-marker {
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px;
+        }
+        .formula {
+            background-color: #F3F4F6;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-family: monospace;
+            font-size: 0.875rem;
+            color: #4B5563;
+            border: 1px solid #E5E7EB;
+        }
+        input[type=range] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            cursor: pointer;
+            width: 100%;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            background: var(--color-accent);
+            height: 0.5rem;
+            border-radius: 0.25rem;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            margin-top: -4px;
+            height: 1.25rem;
+            width: 1.25rem;
+            background-color: var(--color-primary);
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+        .calculator-input {
+             width: 100%;
+             padding: 0.5rem 0.75rem;
+             border-radius: 0.375rem;
+             border: 1px solid #D1D5DB;
+             background-color: #F9FAFB;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-var(--color-primary)">Export Treasury Simulator</h1>
+                </div>
+                <div id="desktop-nav" class="hidden lg:flex items-baseline space-x-2"></div>
+            </div>
+             <div id="mobile-nav" class="lg:hidden pb-2 overflow-x-auto whitespace-nowrap mobile-nav-scroller"></div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+
+        <section id="home">
+            <div class="text-center">
+                <h2 class="text-4xl md:text-5xl font-extrabold text-gray-800 tracking-tight">Mastering Export Finance</h2>
+                <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">This interactive simulator is designed to transform complex treasury concepts into practical, actionable knowledge. Move beyond theory and learn by doing.</p>
+            </div>
+            <div class="card mt-12 p-8">
+                <h3 class="text-2xl font-bold text-center text-gray-800 mb-8">Your Learning Journey</h3>
+                <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-2 text-center text-sm font-semibold text-gray-700">
+                    <div class="w-40 text-center"><div class="mx-auto h-16 w-16 rounded-full bg-var(--color-primary) text-white flex items-center justify-center text-2xl font-bold mb-2">1</div>Case Studies</div><div class="text-2xl text-gray-300 font-light">→</div>
+                    <div class="w-40 text-center"><div class="mx-auto h-16 w-16 rounded-full bg-var(--color-primary) text-white flex items-center justify-center text-2xl font-bold mb-2">2</div>Key Concepts</div><div class="text-2xl text-gray-300 font-light">→</div>
+                    <div class="w-40 text-center"><div class="mx-auto h-16 w-16 rounded-full bg-var(--color-primary) text-white flex items-center justify-center text-2xl font-bold mb-2">3</div>Illustrations</div><div class="text-2xl text-gray-300 font-light">→</div>
+                    <div class="w-40 text-center"><div class="mx-auto h-16 w-16 rounded-full bg-var(--color-primary) text-white flex items-center justify-center text-2xl font-bold mb-2">4</div>Simulation</div><div class="text-2xl text-gray-300 font-light">→</div>
+                    <div class="w-40 text-center"><div class="mx-auto h-16 w-16 rounded-full bg-var(--color-primary) text-white flex items-center justify-center text-2xl font-bold mb-2">5</div>Forecasting</div><div class="text-2xl text-gray-300 font-light">→</div>
+                    <div class="w-40 text-center"><div class="mx-auto h-16 w-16 rounded-full bg-var(--color-primary) text-white flex items-center justify-center text-2xl font-bold mb-2">6</div>Calculators</div>
+                </div>
+                 <p class="text-center text-gray-500 mt-8 max-w-4xl mx-auto">Start with <strong>Case Studies</strong>, ground yourself in the <strong>Key Concepts</strong>, see them applied in the <strong>Illustrations</strong> and <strong>Simulation</strong>, then use the <strong>Forecasting</strong> and <strong>Calculators</strong> tools for strategic planning. The <strong>Zoho Setup</strong> guide is available when you're ready to implement.</p>
+            </div>
+        </section>
+
+        <section id="explorer" class="hidden">
+            <div class="text-center mb-10"><h2 class="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">Interactive Case Study Explorer</h2><p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Analyze real-world export scenarios with detailed cost breakdowns. Select a case study to see the final financial outcome and key profitability drivers.</p></div>
+            <div id="case-study-selector" class="flex flex-wrap justify-center gap-2 md:gap-4 mb-10"></div>
+            <div class="card p-6 md:p-8 transition-opacity duration-500 ease-in-out" id="case-study-content">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="space-y-6">
+                        <div><h3 class="text-2xl font-bold text-var(--color-primary) mb-2" id="case-title"></h3><p class="text-gray-600" id="case-description"></p></div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div class="bg-gray-50 p-4 rounded-lg"><h4 class="font-semibold text-gray-700">Treasury Action</h4><p class="text-gray-600 mt-1" id="case-action"></p></div><div class="bg-gray-50 p-4 rounded-lg"><h4 class="font-semibold text-gray-700">Payment Term</h4><p class="text-gray-600 mt-1" id="case-payment-term"></p></div></div>
+                        <div><h4 class="font-semibold text-gray-700 mb-2">Market Data & Assumptions</h4><ul class="space-y-2 text-gray-600" id="case-market-data"></ul></div>
+                    </div>
+                    <div><h3 class="text-xl font-bold text-center text-gray-800 mb-4">Financial Breakdown</h3><div class="relative w-full h-80 md:h-96"><canvas id="costChart"></canvas></div></div>
+                </div>
+                <div class="mt-8 overflow-x-auto"><h3 class="text-xl font-bold text-gray-800 mb-4">Profitability Analysis</h3><table class="min-w-full bg-white divide-y divide-gray-200 rounded-lg"><tbody id="case-profitability-table" class="divide-y divide-gray-200"></tbody></table></div>
+            </div>
+        </section>
+
+        <section id="capital" class="hidden">
+            <div class="text-center mb-10"><h2 class="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">Key Working Capital Concepts</h2><p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">You've seen the concepts in action. Now let's formalize the definitions, formulas, and benchmarks that drive proactive treasury management.</p></div>
+            <div class="space-y-12">
+                <div class="card p-6"><h3 class="text-xl font-bold text-gray-800">What is Working Capital?</h3><p class="text-sm text-gray-600 mt-2">Working Capital is the lifeblood of a business, representing the capital required to run day-to-day operations.</p><div class="mt-4 pt-4 border-t space-y-4"><p class="font-semibold">Formula:</p><div class="formula">Current Assets - Current Liabilities</div><p class="font-semibold">Net Operating Working Capital (NOWC):</p><p class="text-gray-700">For our purposes, we focus on a more precise metric: NOWC. This isolates the cash tied up in core operations.</p><div class="formula">(Current Assets - Cash) - (Current Liabilities - Debt)</div></div></div>
+                <div class="card p-6"><h3 class="text-xl font-bold text-gray-800">Working Capital Requirement (The Funding Gap)</h3><p class="text-sm text-gray-600 mt-2">This is the exact amount of money you need to borrow or fund from your own equity to bridge the gap between paying suppliers and getting paid by customers.</p><div class="mt-4 pt-4 border-t"><div class="flex flex-col md:flex-row md:items-center justify-center gap-4 text-center my-4"><p class="text-2xl font-bold text-blue-600">(Accounts Receivable + Inventory)</p><span class="text-2xl font-light text-gray-400">-</span><p class="text-2xl font-bold text-green-600">(Accounts Payable)</p><span class="text-2xl font-light text-gray-400">=</span><p class="text-3xl font-extrabold text-red-600">Funding Gap</p></div></div></div>
+                <div class="card p-6"><h3 class="text-xl font-bold text-gray-800">Days Inventory Outstanding (DIO)</h3><p class="text-sm text-gray-600 mt-2">"How long is our cash tied up in raw materials and finished goods before shipment?"</p><div class="mt-4 pt-4 border-t space-y-4"><p class="font-semibold">Formula:</p><div class="formula">(Average Inventory / Cost of Goods Sold) * 365</div><p class="font-semibold">Benchmark: <span class="text-yellow-600 font-bold">45-75 Days</span></p></div></div>
+                <div class="card p-6"><h3 class="text-xl font-bold text-gray-800">Days Sales Outstanding (DSO)</h3><p class="text-sm text-gray-600 mt-2">"How quickly are we collecting cash from our foreign customers after shipment?"</p><div class="mt-4 pt-4 border-t space-y-4"><p class="font-semibold">Formula:</p><div class="formula">(Average Accounts Receivable / Total Credit Sales) * 365</div><p class="font-semibold">Benchmark: <span class="text-blue-600 font-bold">Within 5-10 days of terms</span></p></div></div>
+                <div class="card p-6"><h3 class="text-xl font-bold text-gray-800">Days Payable Outstanding (DPO)</h3><p class="text-sm text-gray-600 mt-2">"How effectively are we using our local suppliers' credit to fund operations?"</p><div class="mt-4 pt-4 border-t space-y-4"><p class="font-semibold">Formula:</p><div class="formula">(Average Accounts Payable / Cost of Goods Sold) * 365</div><p class="font-semibold">Benchmark: <span class="text-green-600 font-bold">45-60 Days</span></p></div></div>
+                <div class="card p-6"><h3 class="text-xl font-bold text-gray-800">Cash Conversion Cycle (CCC)</h3><p class="text-sm text-gray-600 mt-2">The master metric. It calculates the exact number of days your own money is stuck in a single transaction.</p><div class="mt-4 pt-4 border-t space-y-4"><p class="font-semibold">Formula:</p><div class="formula">DIO + DSO - DPO</div><p class="font-semibold">Benchmark: <span class="text-red-600 font-bold">Under 75 Days</span></p></div></div>
+            </div>
+        </section>
+
+        <section id="illustrations" class="hidden">
+            <div class="text-center mb-10"><h2 class="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">Single Order Illustrations</h2><p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Now let's apply the formulas. Select a case study to see how its specific terms and timeline components generate the final working capital numbers.</p></div>
+            <div id="illustration-selector" class="flex flex-wrap justify-center gap-2 md:gap-4 mb-10"></div>
+            <div class="card p-6 md:p-8">
+                <h3 class="text-2xl font-bold text-center text-var(--color-primary) mb-8" id="illustration-title"></h3>
+                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center mb-12">
+                    <div class="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-400"><p class="text-sm font-semibold text-gray-600">Days Inventory Outstanding (DIO)</p><div class="text-3xl font-bold text-yellow-600" id="ill-dio"></div><p class="text-xs text-gray-500" id="ill-dio-formula"></p></div>
+                    <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-400"><p class="text-sm font-semibold text-gray-600">Days Sales Outstanding (DSO)</p><div class="text-3xl font-bold text-blue-600" id="ill-dso"></div><p class="text-xs text-gray-500" id="ill-dso-formula"></p></div>
+                    <div class="bg-green-50 p-4 rounded-lg border-l-4 border-green-400"><p class="text-sm font-semibold text-gray-600">Days Payable Outstanding (DPO)</p><div class="text-3xl font-bold text-green-600" id="ill-dpo"></div><p class="text-xs text-gray-500">From Order to Supplier Payment</p></div>
+                </div>
+                <div class="mb-12"><h4 class="text-xl font-semibold text-center text-gray-800 mb-2">Anatomy of the Transaction Timeline</h4><p class="text-center text-sm text-gray-500 mb-8">This infographic visualizes every stage, from ordering raw materials to getting paid.</p><div id="illustration-timeline-container" class="w-full space-y-4 text-xs font-medium"></div></div>
+                <div class="bg-gray-50 p-6 rounded-lg"><h4 class="text-xl font-bold text-gray-800 mb-4">Calculation & Takeaway</h4><div class="flex flex-col md:flex-row md:items-center justify-center gap-4 text-center mb-4"><p class="text-gray-800 text-lg">CCC Formula:</p><p class="text-xl md:text-2xl font-bold text-gray-800" id="ccc-calculation-string"></p></div><p class="text-gray-700 text-center" id="illustration-narrative"></p></div>
+            </div>
+        </section>
+        
+        <section id="simulation" class="hidden">
+             <div class="text-center mb-10"><h2 class="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">Portfolio Simulation</h2><p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">This is where it all comes together. We now simulate all five orders running concurrently to see their combined impact on your company's cash flow.</p></div>
+             <div class="card p-6 md:p-8">
+                 <div class="mb-12">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Step 1: Simulation Setup & Data</h3>
+                    <p class="text-sm text-gray-600 mb-4">First, we lay out the timeline and funding needs for each order based on their specific terms. This data will drive the simulation.</p>
+                    <div class="overflow-x-auto"><table class="min-w-full text-sm text-left"><thead class="bg-gray-50 text-xs text-gray-700 uppercase"><tr><th class="px-4 py-2">Order</th><th class="px-4 py-2">Start Date</th><th class="px-4 py-2">Cash Out Date<br><span class="font-normal normal-case">(Start + DPO)</span></th><th class="px-4 py-2">Cash In Date<br><span class="font-normal normal-case">(Start + DIO + DSO)</span></th><th class="px-4 py-2">Funding Gap<br><span class="font-normal normal-case">(CCC)</span></th><th class="px-4 py-2">Amount to Fund<br><span class="font-normal normal-case">(COGS)</span></th></tr></thead><tbody id="simulation-setup-table" class="divide-y"></tbody></table></div>
+                </div>
+                <div class="mb-12">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Step 2: Concurrent Order Timelines (Gantt Chart)</h3>
+                     <div class="flex items-center space-x-4 text-xs mb-4">
+                        <div class="flex items-center"><div class="w-4 h-4 bg-green-500 rounded-sm mr-2"></div><span>Supplier Credit (DPO - Interest-Free)</span></div>
+                        <div class="flex items-center"><div class="w-4 h-4 bg-red-500 rounded-sm mr-2"></div><span>Funding Gap (CCC - Capital Required)</span></div>
+                    </div>
+                    <div class="p-2 border rounded-lg overflow-x-auto"><div id="gantt-chart-container" class="space-y-4 text-sm font-semibold" style="min-width: 600px;"></div></div>
+                </div>
+                <div class="mb-12"><h3 class="text-xl font-bold text-gray-800 mb-4">Step 3: Simulated Working Capital Requirement</h3><div class="relative w-full h-80 md:h-96"><canvas id="cashFlowChart"></canvas></div></div>
+                <div class="bg-gray-50 p-6 rounded-lg"><h4 class="text-xl font-bold text-gray-800 mb-4">Key Treasury Insights</h4><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div class="bg-red-100 p-4 rounded-lg text-center"><p class="text-sm font-semibold text-red-800">Peak Funding Requirement</p><p id="peak-funding" class="text-3xl font-bold text-red-700"></p><p class="text-xs text-red-600">This is the maximum capital needed at any single point in time.</p></div><div class="text-gray-700"><p class="font-semibold">The Stacking Effect:</p><p>Notice how the funding requirements of individual orders "stack" on top of each other. The peak is not determined by the largest single order, but by the maximum overlap of multiple orders. This simulation reveals your true credit line requirement.</p></div></div></div>
+             </div>
+        </section>
+        
+        <section id="forecasting" class="hidden">
+            <div class="text-center mb-10"><h2 class="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">Forecasting & Sensitivity Analysis</h2><p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Move from analysis to strategic planning. Use these sliders to model different business scenarios and instantly see the impact on your peak funding needs.</p></div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-1 card p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-6">Scenario Control Panel</h3>
+                    <div class="space-y-6">
+                        <div><label for="salesGrowth" class="font-semibold">Sales Growth</label><input type="range" id="salesGrowth" min="-50" max="100" value="0" oninput="runForecast()"><span id="salesGrowthValue" class="text-sm text-gray-600 block text-center font-medium"></span></div>
+                        <div><label for="avgDIO" class="font-semibold">Average DIO (Days)</label><input type="range" id="avgDIO" min="30" max="120" value="75" oninput="runForecast()"><span id="avgDIOValue" class="text-sm text-gray-600 block text-center font-medium"></span></div>
+                        <div><label for="avgDSO" class="font-semibold">Average DSO (Days)</label><input type="range" id="avgDSO" min="30" max="150" value="90" oninput="runForecast()"><span id="avgDSOValue" class="text-sm text-gray-600 block text-center font-medium"></span></div>
+                        <div><label for="avgDPO" class="font-semibold">Average DPO (Days)</label><input type="range" id="avgDPO" min="15" max="90" value="45" oninput="runForecast()"><span id="avgDPOValue" class="text-sm text-gray-600 block text-center font-medium"></span></div>
+                    </div>
+                </div>
+                <div class="lg:col-span-2 card p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Forecasted Working Capital</h3>
+                    <div class="relative w-full h-80 md:h-96"><canvas id="forecastChart"></canvas></div>
+                    <div class="mt-6 bg-gray-50 p-6 rounded-lg">
+                        <h4 class="text-xl font-bold text-gray-800 mb-4">Forecast Insights</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                            <div class="bg-blue-100 p-4 rounded-lg"><p class="text-sm font-semibold text-blue-800">Peak Funding Amount</p><p id="forecast-peak-funding" class="text-2xl font-bold text-blue-700"></p></div>
+                            <div class="bg-blue-100 p-4 rounded-lg"><p class="text-sm font-semibold text-blue-800">Peak Funding Period</p><p id="forecast-peak-period" class="text-sm font-bold text-blue-700"></p></div>
+                            <div class="bg-blue-100 p-4 rounded-lg"><p class="text-sm font-semibold text-blue-800">Peak Funding Duration</p><p id="forecast-peak-duration" class="text-2xl font-bold text-blue-700"></p></div>
+                        </div>
+                         <p class="text-xs text-gray-500 mt-4 text-center">Knowing the exact period and duration of maximum capital strain is critical for negotiating the right type and tenor of credit facilities.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="calculators" class="hidden">
+            <div class="text-center mb-10"><h2 class="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">Live Working Capital Calculator</h2><p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Input your own company's data to calculate your Cash Conversion Cycle and funding requirements in real-time.</p></div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-6">Input Your Financials (Annual)</h3>
+                    <div class="space-y-4">
+                        <div><label for="calc-sales" class="font-semibold text-sm text-gray-700">Annual Sales Revenue</label><input type="number" id="calc-sales" class="calculator-input" value="10000000" oninput="calculateCustomCCC()"></div>
+                        <div><label for="calc-cogs" class="font-semibold text-sm text-gray-700">Annual Cost of Goods Sold (COGS)</label><input type="number" id="calc-cogs" class="calculator-input" value="6000000" oninput="calculateCustomCCC()"></div>
+                        <div><label for="calc-inventory" class="font-semibold text-sm text-gray-700">Average Inventory</label><input type="number" id="calc-inventory" class="calculator-input" value="1500000" oninput="calculateCustomCCC()"></div>
+                        <div><label for="calc-ar" class="font-semibold text-sm text-gray-700">Average Accounts Receivable (AR)</label><input type="number" id="calc-ar" class="calculator-input" value="2000000" oninput="calculateCustomCCC()"></div>
+                        <div><label for="calc-ap" class="font-semibold text-sm text-gray-700">Average Accounts Payable (AP)</label><input type="number" id="calc-ap" class="calculator-input" value="1000000" oninput="calculateCustomCCC()"></div>
+                    </div>
+                </div>
+                <div class="card p-6 bg-gray-50">
+                     <h3 class="text-xl font-bold text-center text-gray-800 mb-6">Calculated Results</h3>
+                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center mb-8">
+                        <div class="bg-yellow-100 p-4 rounded-lg"><p class="text-sm font-semibold text-yellow-800">DIO</p><div class="text-3xl font-bold text-yellow-700" id="calc-dio-result"></div></div>
+                        <div class="bg-blue-100 p-4 rounded-lg"><p class="text-sm font-semibold text-blue-800">DSO</p><div class="text-3xl font-bold text-blue-700" id="calc-dso-result"></div></div>
+                        <div class="bg-green-100 p-4 rounded-lg"><p class="text-sm font-semibold text-green-800">DPO</p><div class="text-3xl font-bold text-green-700" id="calc-dpo-result"></div></div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-inner">
+                        <h4 class="text-lg font-bold text-center text-gray-800 mb-4">Cash Conversion Cycle (CCC)</h4>
+                        <div class="flex items-center justify-center gap-2 text-center mb-4"><p class="text-xl font-bold text-gray-800" id="ccc-calc-string"></p></div>
+                        <hr class="my-6">
+                        <h4 class="text-lg font-bold text-center text-gray-800 mb-4">Working Capital Requirement</h4>
+                        <p class="text-4xl text-center font-extrabold text-red-600" id="calc-funding-gap"></p>
+                        <p class="text-xs text-gray-500 mt-2 text-center">This is the amount of capital your business needs to fund its operations.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="zoho" class="hidden">
+            <div class="text-center mb-10"><h2 class="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">Zoho Books Implementation Guide</h2><p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">A practical, step-by-step process for implementing the Unified Export Costing Framework within Zoho Books.</p></div>
+            <div class="max-w-4xl mx-auto space-y-4" id="zoho-accordion"></div>
+            <div class="card p-6 mt-12 max-w-4xl mx-auto"><h3 class="text-2xl font-semibold text-center text-gray-800 mb-6">Data Integrity: The "Untagged Transactions" Safety Net</h3><p class="text-center text-gray-600 mb-4">This is your most powerful detection tool. Follow these steps to create a custom report that will catch any expense that has not been allocated to a project.</p><ul class="list-decimal list-inside space-y-2 text-gray-700"><li>Navigate to <strong>Reports > Accountant > Export as Data</strong>.</li><li>In the module dropdown, select <strong>Expenses</strong>.</li><li>Click on <strong>+ New Export Template</strong> and create a filter where <strong>Project Name is (empty)</strong>.</li><li>Save the template as "Weekly Untagged Expense Audit". Run it weekly to ensure it's always empty.</li></ul></div>
+        </section>
+
+    </main>
+    
+    <footer class="bg-white mt-12"><div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center text-gray-500 text-sm"><p>&copy; 2025 Interactive Export Treasury Simulator. All data is illustrative.</p></div></footer>
+
+    <script>
+        const navItems = [
+            { id: 'home', label: 'Home' }, { id: 'explorer', label: 'Case Studies' }, { id: 'capital', label: 'Key Concepts' }, { id: 'illustrations', label: 'Illustrations' }, { id: 'simulation', label: 'Portfolio Simulation' }, { id: 'forecasting', label: 'Forecasting' }, { id: 'calculators', label: 'Calculators' }, { id: 'zoho', label: 'Zoho Setup' },
+        ];
+        const caseStudiesData = [
+            { title: "Case 1: Baseline USD", description: "This case illustrates the fundamental risk of an unhedged transaction, where profitability is directly exposed to currency market volatility.", currency: "USD", treasuryAction: "Not hedged. Converted at spot rate on receipt.", paymentTerm: "90 days from B/L date", marketData: ["Spot USD/INR on PO Date: 81.60", "Spot USD/INR on Payment Date: 82.15", "Pre-Shipment Finance (90 days @ 9.90%)", "Post-Shipment Finance (90 days @ 9.90%)"], analysis: [ { label: "Invoice Value (FCY)", value: "USD 150,000" }, { label: "Gross Realization in INR", value: "INR 12,322,500", bold: true }, { label: "Less: Total Transaction Costs", value: "", header: true }, { label: "Pre-Shipment Credit Interest", value: "INR 122,055", sub: true }, { label: "Post-Shipment Credit Interest", value: "INR 298,636", sub: true }, { label: "Freight & Insurance (CIF)", value: "INR 750,000", sub: true }, { label: "Banking & Swift Charges", value: "INR 8,500", sub: true }, { label: "Total Transaction Costs", value: "INR 1,179,191", bold: true, sub: true }, { label: "Net Realization in INR", value: "INR 11,143,309", bold: true }, { label: "Forex Gain / Loss", value: "INR 82,500 (Gain)", highlight: 'green' } ], chartData: { costs: [122055, 298636, 750000, 8500], costLabels: ["Pre-Ship Interest", "Post-Ship Interest", "Freight & Insurance", "Bank Charges"], net: 11143309 }, illustration: { dpo: 45, rawMaterialDays: 30, productionDays: 60, shippingTransitDays: 20, customerCreditDays: 70, cogs: 9241875, apValue: 5545125 } },
+            { title: "Case 2: Hedged EUR", description: "Demonstrates how a forward contract eliminates uncertainty and locks in a guaranteed profit margin, avoiding a potential loss.", currency: "EUR", treasuryAction: "Booked a 3-month forward contract to sell EUR 200,000.", paymentTerm: "90 days from B/L date", marketData: ["Spot EUR/INR on PO Date: 89.65", "3-Month Forward Rate Booked: 90.10", "Spot EUR/INR on Payment Date: 89.20"], analysis: [ { label: "Invoice Value (FCY)", value: "EUR 200,000" }, { label: "Gross Realization in INR (Locked-in)", value: "INR 18,020,000", bold: true }, { label: "Less: Total Transaction Costs", value: "", header: true }, { label: "Pre-Shipment Credit Interest", value: "INR 197,260", sub: true }, { label: "Post-Shipment Credit Interest", value: "INR 440,008", sub: true }, { label: "Banking & Forward Booking Charges", value: "INR 11,000", sub: true }, { label: "Total Transaction Costs", value: "INR 648,268", bold: true, sub: true }, { label: "Net Realization in INR", value: "INR 17,371,732", bold: true }, { label: "Forex Loss Avoided by Hedging", value: "INR 180,000", highlight: 'green' } ], chartData: { costs: [197260, 440008, 11000], costLabels: ["Pre-Ship Interest", "Post-Ship Interest", "Bank & Fwd Charges"], net: 17371732 }, illustration: { dpo: 45, rawMaterialDays: 30, productionDays: 60, shippingTransitDays: 20, customerCreditDays: 70, cogs: 13515000, apValue: 8109000 } },
+            { title: "Case 3: Cost of Delay GBP", description: "Highlights how operational failures in the supply chain can lead to significant, unbudgeted financial penalties that erode profitability.", currency: "GBP", treasuryAction: "Hedged with a 2-month forward contract.", paymentTerm: "60 days from B/L date", marketData: ["Spot GBP/INR on PO Date: 106.50", "2-Month Forward Rate Booked: 107.05", "Demurrage: 5 days @ GBP 150/day", "Detention: 3 days @ GBP 100/day"], analysis: [ { label: "Invoice Value (FCY)", value: "GBP 100,000" }, { label: "Gross Realization in INR (Locked-in)", value: "INR 10,705,000", bold: true }, { label: "Less: Total Transaction Costs", value: "", header: true }, { label: "Pre-Shipment Credit Interest", value: "INR 78,904", sub: true }, { label: "Post-Shipment Credit Interest", value: "INR 174,013", sub: true }, { label: "Freight, Duties & Transport (DDP)", value: "INR 1,200,000", sub: true }, { label: "Banking & Swift Charges", value: "INR 8,500", sub: true }, { label: "Contingent Costs", value: "INR 112,140", sub: true, highlight: 'red' }, { label: "Total Transaction Costs", value: "INR 1,573,557", bold: true, sub: true }, { label: "Net Realization in INR", value: "INR 9,131,443", bold: true }, ], chartData: { costs: [78904, 174013, 1200000, 8500, 112140], costLabels: ["Pre-Ship Interest", "Post-Ship Interest", "Logistics", "Bank Charges", "Demurrage"], net: 9131443 }, illustration: { dpo: 45, rawMaterialDays: 20, productionDays: 40, shippingTransitDays: 15, customerCreditDays: 45, cogs: 8028750, apValue: 4817250 } },
+            { title: "Case 4: Volatility JPY", description: "Compares the outcomes for a shipment in a volatile currency, quantifying the value and opportunity cost of hedging.", currency: "JPY", treasuryAction: "Analyzed both Unhedged and Hedged scenarios.", paymentTerm: "90 days from B/L date", marketData: ["Spot JPY/INR (per 100) on PO Date: 55.80", "3-Month Forward Rate: 56.10", "Spot JPY/INR (per 100) on Payment Date: 57.50"], analysis: [ { label: "Gross Realization (Unhedged)", value: "INR 14,375,000", bold: true }, { label: "Gross Realization (Hedged)", value: "INR 14,025,000", bold: true }, { label: "Net Realization (Unhedged)", value: "INR 12,367,292", bold: true }, { label: "Net Realization (Hedged)", value: "INR 12,023,458", bold: true }, { label: "Forex Gain (Unhedged)", value: "INR 425,000 (Gain)", highlight: 'green' }, { label: "Opportunity Cost of Hedging", value: "INR 343,834", highlight: 'orange' } ], chartData: { type: 'grouped', unhedged: { net: 12367292, costs: 2007708 }, hedged: { net: 12023458, costs: 2001542 } }, illustration: { dpo: 45, rawMaterialDays: 30, productionDays: 60, shippingTransitDays: 20, customerCreditDays: 70, cogs: 10781250, apValue: 6468750 } },
+            { title: "Case 5: Long Credit AUD", description: "Examines the direct cost of offering extended credit terms and the significant impact of post-shipment financing choices.", currency: "AUD", treasuryAction: "Hedged with a 4-month forward contract.", paymentTerm: "120 days from B/L date", marketData: ["Spot AUD/INR on PO Date: 55.20", "4-Month Forward Rate Booked: 55.65", "Post-Shipment Finance (120 days @ 9.90%)"], analysis: [ { label: "Invoice Value (FCY)", value: "AUD 250,000" }, { label: "Gross Realization in INR (Locked-in)", value: "INR 13,912,500", bold: true }, { label: "Less: Total Transaction Costs", value: "", header: true }, { label: "Pre-Shipment Credit Interest", value: "INR 157,808", sub: true }, { label: "Post-Shipment Credit Interest (120 days)", value: "INR 452,518", sub: true, highlight: 'red' }, { label: "Banking & Swift Charges", value: "INR 8,500", sub: true }, { label: "Total Transaction Costs", value: "INR 618,826", bold: true, sub: true }, { label: "Net Realization in INR", value: "INR 13,293,674", bold: true } ], chartData: { costs: [157808, 452518, 8500], costLabels: ["Pre-Ship Interest", "Post-Ship Interest (120d)", "Bank Charges"], net: 13293674 }, illustration: { dpo: 45, rawMaterialDays: 30, productionDays: 60, shippingTransitDays: 30, customerCreditDays: 90, cogs: 10434375, apValue: 6260625 } }
+        ];
+        const zohoGuideData = [
+            { title: "1. Foundational Setup", content: `<p class="mb-4">Before tracking orders, configure your Zoho Books account for export operations.</p><ul class="list-disc pl-5 space-y-2"><li><strong>Customize Chart of Accounts:</strong> Create specific expense accounts (e.g., 'Export: Pre-Shipment Interest', 'Export: Bill Discounting Charges') for accurate tracking.</li><li><strong>Enable Multi-Currency:</strong> Add all foreign currencies you transact in.</li><li><strong>Set Up Items:</strong> Define raw materials and finished goods to track inventory for accurate COGS calculation.</li></ul>` }, { title: "2. Tracking an Export Order as a Project", content: `<p class="mb-4">This is the core of the PO-centric costing method. Each export PO becomes a distinct profit center.</p><ul class="list-disc pl-5 space-y-2"><li><strong>Enable Projects Module:</strong> Ensure the 'Timesheet' module is enabled in settings.</li><li><strong>Create a Project for Each PO:</strong> When a new export PO is received, create a new project. Use the PO number as the project name (e.g., "PO-123-USA").</li></ul>` }, { title: "3. Recording Costs & Revenue", content: `<p class="mb-4">Meticulously link every single transaction to its corresponding project.</p><ul class="list-disc pl-5 space-y-2"><li><strong>Record Expenses:</strong> For all costs (interest, bank charges, freight), you must select the customer and associate it with the correct <strong>Project</strong>.</li><li><strong>Create Export Invoice:</strong> When creating the sales invoice, link it to the same project.</li></ul>` }, { title: "4. Analyzing Profitability", content: `<p class="mb-4">With all data tracked, you can now view the true profitability of each export order.</p><ul class="list-disc pl-5 space-y-2"><li><strong>Run the Project Profitability Report:</strong> Navigate to 'Reports' > 'Projects' > 'Profit and Loss for Projects'.</li><li><strong>Filter by Project:</strong> Select the specific project to generate its P&L statement, showing true net profit.</li></ul>` }
+        ];
+        let costChart, cashFlowChart, forecastChart;
+        let baseSimData = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setupNavigation(); setupSelectors(); setupZohoAccordion(); initCharts();
+            displayCaseStudy(0); displayIllustration(0); renderPortfolioSimulation(); runForecast(); calculateCustomCCC(); showSection('home');
+        });
+
+        function setupNavigation() {
+            const desktopNav = document.getElementById('desktop-nav'); const mobileNav = document.getElementById('mobile-nav');
+            navItems.forEach(item => {
+                const dButton = document.createElement('button'); dButton.id = `nav-d-${item.id}`; dButton.className = 'nav-button px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-var(--color-accent)'; dButton.textContent = item.label; dButton.onclick = () => showSection(item.id); desktopNav.appendChild(dButton);
+                const mButton = document.createElement('button'); mButton.id = `nav-m-${item.id}`; mButton.className = 'nav-button px-4 py-2 rounded-full text-sm font-semibold mr-2 flex-shrink-0'; mButton.textContent = item.label; mButton.onclick = () => showSection(item.id); mobileNav.appendChild(mButton);
+            });
+        }
+        
+        function setupSelectors() {
+            const csSelector = document.getElementById('case-study-selector'); const illSelector = document.getElementById('illustration-selector');
+            csSelector.innerHTML = ''; illSelector.innerHTML = '';
+            caseStudiesData.forEach((study, index) => {
+                const csButton = document.createElement('button'); csButton.className = 'selector-button px-4 py-2 text-sm md:text-base font-semibold border-2 border-gray-300 rounded-full shadow-sm hover:bg-var(--color-accent) transition-all duration-300 ease-in-out'; csButton.textContent = study.title; csButton.onclick = () => displayCaseStudy(index); csSelector.appendChild(csButton);
+                const illButton = csButton.cloneNode(true); illButton.onclick = () => displayIllustration(index); illSelector.appendChild(illButton);
+            });
+        }
+
+        function setupZohoAccordion() {
+            const accordionContainer = document.getElementById('zoho-accordion'); accordionContainer.innerHTML = '';
+            zohoGuideData.forEach((item) => {
+                const div = document.createElement('div'); div.className = 'card overflow-hidden';
+                div.innerHTML = `<button class="accordion-header w-full text-left p-4 font-semibold text-gray-800 flex justify-between items-center hover:bg-var(--color-accent)"><span>${item.title}</span><span class="transform transition-transform duration-300 text-var(--color-primary) text-xl">&#x25BC;</span></button><div class="accordion-content"><div class="p-4 bg-gray-50 text-gray-600 border-t">${item.content}</div></div>`;
+                accordionContainer.appendChild(div);
+            });
+            accordionContainer.addEventListener('click', (event) => {
+                const header = event.target.closest('.accordion-header'); if (!header) return; const content = header.nextElementSibling; const isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
+                document.querySelectorAll('.accordion-content').forEach(c => { c.style.maxHeight = '0px'; c.previousElementSibling.classList.remove('open'); c.previousElementSibling.querySelector('span:last-child').style.transform = 'rotate(0deg)'; });
+                if (!isOpen) { content.style.maxHeight = content.scrollHeight + 'px'; header.classList.add('open'); header.querySelector('span:last-child').style.transform = 'rotate(180deg)';}
+            });
+        }
+
+        function displayCaseStudy(index) {
+            const study = caseStudiesData[index];
+            document.getElementById('case-title').textContent = study.title; document.getElementById('case-description').textContent = study.description; document.getElementById('case-action').textContent = study.treasuryAction; document.getElementById('case-payment-term').textContent = study.paymentTerm;
+            document.getElementById('case-market-data').innerHTML = study.marketData.map(item => `<li class="flex items-center"><span class="text-var(--color-secondary) mr-2">&#x25CF;</span>${item}</li>`).join('');
+            document.getElementById('case-profitability-table').innerHTML = study.analysis.map(row => {
+                if (row.header) return `<tr class="bg-gray-100"><td colspan="2" class="px-6 py-2 text-sm font-bold text-gray-700">${row.label}</td></tr>`;
+                let valueClass = 'text-gray-800'; if (row.highlight === 'green') valueClass = 'text-green-600 font-semibold'; if (row.highlight === 'red') valueClass = 'text-red-600 font-semibold'; if (row.highlight === 'orange') valueClass = 'text-orange-500 font-semibold';
+                return `<tr class="${row.bold && !row.sub ? 'bg-gray-50' : ''}"><td class="px-6 py-3 text-sm font-medium text-gray-600 ${row.sub ? 'pl-10' : ''}">${row.label}</td><td class="px-6 py-3 text-sm text-right ${valueClass} ${row.bold ? 'font-bold' : ''}">${row.value}</td></tr>`;
+            }).join('');
+            updateChart(costChart, study.chartData);
+            document.querySelectorAll('#case-study-selector button').forEach((btn, i) => btn.classList.toggle('active', i === index));
+        }
+        
+        function displayIllustration(index) {
+            const study = caseStudiesData[index]; const ill = study.illustration; const grossRealization = parseFloat(study.analysis.find(r => r.label.includes("Gross Realization")).value.replace(/[^\d.]/g, ''));
+            const dio = ill.rawMaterialDays + ill.productionDays; const dso = ill.shippingTransitDays + ill.customerCreditDays; const dpo = ill.dpo; const ccc = dio + dso - dpo;
+            const formatCurrency = (num) => `₹${(num / 100000).toFixed(1)}L`;
+            document.getElementById('illustration-title').textContent = study.title;
+            document.getElementById('ill-dio').textContent = `${dio} Days`; document.getElementById('ill-dso').textContent = `${dso} Days`; document.getElementById('ill-dpo').textContent = `${dpo} Days`;
+            document.getElementById('ill-dio-formula').textContent = `Raw Material (${ill.rawMaterialDays}d) + Production (${ill.productionDays}d)`;
+            document.getElementById('ill-dso-formula').textContent = `Transit (${ill.shippingTransitDays}d) + Credit (${ill.customerCreditDays}d)`;
+            document.getElementById('ccc-calculation-string').innerHTML = `<span class="text-yellow-600">${dio}</span><span class="text-sm">(DIO)</span> + <span class="text-blue-600">${dso}</span><span class="text-sm">(DSO)</span> - <span class="text-green-600">${dpo}</span><span class="text-sm">(DPO)</span> = <span class="text-5xl font-extrabold text-red-600 ml-2">${ccc}</span><span class="text-lg text-red-600 font-semibold ml-1">Days</span>`;
+            document.getElementById('illustration-narrative').textContent = `For this transaction, a funding gap of ${formatCurrency(ill.cogs)} exists for a total of ${ccc} days. This period begins the moment you pay your supplier (Cash Out) and only ends when your customer pays (Cash In). This ${ccc}-day gap must be financed through your own capital or banking facilities.`;
+            document.querySelectorAll('#illustration-selector button').forEach((btn, i) => btn.classList.toggle('active', i === index));
+            drawDetailedTimeline(ill);
+        }
+
+        function drawDetailedTimeline(data) {
+            const container = document.getElementById('illustration-timeline-container'); container.innerHTML = '';
+            const dio = data.rawMaterialDays + data.productionDays; const dso = data.shippingTransitDays + data.customerCreditDays; const dpo = data.dpo; const totalCycleDays = dio + dso;
+            const timelineData = [
+                { name: 'Operational Flow', segments: [ { label: `Raw Material (${data.rawMaterialDays}d)`, duration: data.rawMaterialDays, color: 'from-yellow-300 to-yellow-400' }, { label: `Production (${data.productionDays}d)`, duration: data.productionDays, color: 'from-yellow-400 to-yellow-500' }, { label: `Transit (${data.shippingTransitDays}d)`, duration: data.shippingTransitDays, color: 'from-blue-300 to-blue-400' }, { label: `Credit (${data.customerCreditDays}d)`, duration: data.customerCreditDays, color: 'from-blue-400 to-blue-500' }, ]},
+                { name: 'Financial Flow (AP/AR)', segments: [ { label: `Accounts Payable (DPO: ${dpo}d)`, duration: dpo, color: 'from-green-300 to-green-500' }, { label: `Accounts Receivable (DSO: ${dso}d)`, duration: dso, offset: dio, color: 'from-blue-300 to-blue-500' }, ]},
+                { name: 'Cash Flow (Funding Gap)', segments: [ { label: `Supplier Credit`, duration: dpo, color: 'from-green-300 to-green-500' }, { label: `FUNDING GAP (CCC: ${dio + dso - dpo}d)`, duration: dio + dso - dpo, offset: dpo, color: 'from-red-400 to-red-600' }, ]},
+            ];
+            timelineData.forEach(layer => {
+                let html = `<div class="mb-1"><p class="font-bold text-gray-700 text-sm">${layer.name}</p></div><div class="timeline-label-container">`; let trackHtml = `<div class="timeline-track">`; let cumulativeOffset = 0;
+                layer.segments.forEach(seg => {
+                    const width = (seg.duration / totalCycleDays) * 100; const offset = ((seg.offset !== undefined ? seg.offset : cumulativeOffset) / totalCycleDays) * 100; const midpoint = offset + width / 2;
+                    trackHtml += `<div class="timeline-segment bg-gradient-to-r ${seg.color}" style="left: ${offset}%; width: ${width}%;"></div>`;
+                    html += `<div class="timeline-label text-gray-600" style="left: ${midpoint}%;">${seg.label}</div>`;
+                    if (seg.offset === undefined) cumulativeOffset += seg.duration;
+                });
+                trackHtml += `</div>`; html += `</div>${trackHtml}`;
+                if (layer.name === 'Cash Flow (Funding Gap)') {
+                    const cashOutPercent = (dpo / totalCycleDays) * 100;
+                    html += `<div class="relative w-full h-10 text-gray-600"><div class="timeline-track" style="background:transparent;"><div class="event-marker bg-red-600 shadow-red-500/50" style="left: ${cashOutPercent}%;"></div><div class="event-marker bg-green-600 shadow-green-500/50" style="left: 100%;"></div><div class="absolute text-center text-xs" style="left: ${cashOutPercent}%; top:20px; transform: translateX(-50%);"><span class="font-semibold">Cash Out</span><br>(Pay Supplier)</div><div class="absolute text-center text-xs" style="left: 100%; top:20px; transform: translateX(-50%);"><span class="font-semibold">Cash In</span><br>(Paid by Customer)</div></div></div>`;
+                }
+                container.innerHTML += `<div class="mb-8">${html}</div>`;
+            });
+        }
+
+        function initCharts() {
+            const costCtx = document.getElementById('costChart').getContext('2d');
+            costChart = new Chart(costCtx, { type: 'bar', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true } }, plugins: { tooltip: { callbacks: { label: c => `${c.dataset.label || ''}: ${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(c.parsed.y)}` } } } } });
+            
+            const cashFlowCtx = document.getElementById('cashFlowChart').getContext('2d');
+            cashFlowChart = new Chart(cashFlowCtx, { type: 'line', data: { datasets: []}, options: { responsive: true, maintainAspectRatio: false, scales: { x: { type: 'time', time: { unit: 'month' }, grid: { display: false } }, y: { beginAtZero: true, ticks: { callback: (v) => `₹${(v/100000).toFixed(0)}L` } } }, interaction: { mode: 'index', intersect: false }, plugins: { tooltip: { callbacks: { label: c => `Required Capital: ${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(c.parsed.y)}` } }, legend: {display: false} } } });
+
+            const forecastCtx = document.getElementById('forecastChart').getContext('2d');
+            forecastChart = new Chart(forecastCtx, { type: 'line', data: { datasets: []}, options: { responsive: true, maintainAspectRatio: false, scales: { x: { type: 'time', time: { unit: 'month' }, grid: { display: false } }, y: { beginAtZero: true, ticks: { callback: (v) => `₹${(v/100000).toFixed(0)}L` } } }, 
+            interaction: {
+                mode: 'nearest',
+                intersect: true
+            }, 
+            plugins: { tooltip: { callbacks: { label: c => `${c.dataset.label}: ${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(c.parsed.y)}` } }, annotation: { annotations: {} } } } });
+        }
+
+        function updateChart(chart, data) {
+            const isGrouped = data.type === 'grouped'; chart.options.scales.x.stacked = !isGrouped; chart.options.scales.y.stacked = !isGrouped;
+            if (isGrouped) {
+                chart.data.labels = ['Unhedged', 'Hedged']; chart.data.datasets = [ { label: 'Net Realization', data: [data.unhedged.net, data.hedged.net], backgroundColor: '#85583F' }, { label: 'Total Costs', data: [data.unhedged.costs, data.hedged.costs], backgroundColor: '#F3EADD' } ];
+            } else {
+                chart.data.labels = ['Financial Breakdown']; const costColors = ['#FAD2B1', '#F2B880', '#E99A4D', '#C08A6A', '#BF8B67'];
+                const datasets = [{ label: 'Net Realization', data: [data.net], backgroundColor: '#85583F' }];
+                data.costs.forEach((cost, i) => datasets.push({ label: data.costLabels[i], data: [cost], backgroundColor: costColors[i % costColors.length] }));
+                chart.data.datasets = datasets;
+            }
+            chart.update();
+        }
+
+        function renderPortfolioSimulation() {
+            const addDays = (date, days) => { const result = new Date(date); result.setDate(result.getDate() + days); return result; };
+            const formatDate = (date) => date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+            const formatCurrency = (num) => `₹${(num / 100000).toFixed(1)}L`;
+            const simStartDate = new Date('2025-10-01');
+            baseSimData = [
+                { name: 'Case 1: USD', startDate: new Date('2025-10-01'), ...caseStudiesData[0] }, { name: 'Case 2: EUR', startDate: new Date('2025-10-10'), ...caseStudiesData[1] }, { name: 'Case 3: GBP', startDate: new Date('2025-10-22'), ...caseStudiesData[2] }, { name: 'Case 4: JPY', startDate: new Date('2025-11-05'), ...caseStudiesData[3] }, { name: 'Case 5: AUD', startDate: new Date('2025-11-15'), ...caseStudiesData[4] }
+            ];
+            
+            const setupTable = document.getElementById('simulation-setup-table'); setupTable.innerHTML = '';
+            baseSimData.forEach(order => {
+                const ill = order.illustration; const dio = ill.rawMaterialDays + ill.productionDays; const dso = ill.shippingTransitDays + ill.customerCreditDays; const ccc = dio + dso - ill.dpo;
+                const cashOutDate = addDays(order.startDate, ill.dpo); const cashInDate = addDays(order.startDate, dio + dso);
+                const row = `<tr><td class="px-4 py-3 font-medium text-gray-900">${order.name}</td><td class="px-4 py-3">${formatDate(order.startDate)}</td><td class="px-4 py-3">${formatDate(cashOutDate)}</td><td class="px-4 py-3">${formatDate(cashInDate)}</td><td class="px-4 py-3 font-semibold">${ccc} days</td><td class="px-4 py-3 font-semibold text-red-600">${formatCurrency(ill.cogs)}</td></tr>`;
+                setupTable.innerHTML += row;
+            });
+
+            const ganttContainer = document.getElementById('gantt-chart-container'); ganttContainer.innerHTML = '';
+            const totalSimDays = 180;
+            baseSimData.forEach(order => {
+                const ill = order.illustration; const dio = ill.rawMaterialDays + ill.productionDays; const dso = ill.shippingTransitDays + ill.customerCreditDays;
+                const dpoStartOffset = (order.startDate - simStartDate) / (1000 * 3600 * 24);
+                const dpoWidth = (ill.dpo / totalSimDays) * 100; const cccWidth = ((dio + dso - ill.dpo) / totalSimDays) * 100; const dpoOffset = (dpoStartOffset / totalSimDays) * 100;
+                const orderRow = document.createElement('div');
+                orderRow.innerHTML = `<p class="mb-1">${order.name}</p><div class="w-full h-6 bg-gray-200 rounded-full relative"><div class="absolute h-full bg-green-500 rounded-l-full" style="left: ${dpoOffset}%; width: ${dpoWidth}%;"></div><div class="absolute h-full bg-red-500 rounded-r-full" style="left: ${dpoOffset + dpoWidth}%; width: ${cccWidth}%;"></div></div>`;
+                ganttContainer.appendChild(orderRow);
+            });
+            
+            const { cashFlowData, peakFunding } = calculateCashFlow(baseSimData, simStartDate);
+            
+            document.getElementById('peak-funding').textContent = formatCurrency(peakFunding);
+            cashFlowChart.data.datasets = [{ data: cashFlowData, borderColor: '#DC2626', backgroundColor: 'rgba(239, 68, 68, 0.1)', fill: true, tension: 0.1, pointRadius: 0, pointHoverRadius: 5 }];
+            cashFlowChart.update();
+        }
+        
+        function calculateCashFlow(portfolioData, simStartDate, duration = 180) {
+            const addDays = (date, days) => { const result = new Date(date); result.setDate(result.getDate() + days); return result; };
+            const cashFlowEvents = [];
+            portfolioData.forEach(order => {
+                const gross = parseFloat(order.analysis.find(r => r.label.includes("Gross Realization")).value.replace(/[^\d.]/g, ''));
+                cashFlowEvents.push({ date: addDays(order.startDate, order.illustration.dpo), amount: -order.illustration.cogs });
+                cashFlowEvents.push({ date: addDays(order.startDate, order.illustration.rawMaterialDays + order.illustration.productionDays + order.illustration.shippingTransitDays + order.illustration.customerCreditDays), amount: gross });
+            });
+            cashFlowEvents.sort((a, b) => a.date - b.date);
+
+            let cumulative = 0; let peakFunding = 0;
+            const cashFlowData = [{x: simStartDate, y: 0}];
+            cashFlowEvents.forEach(event => {
+                cashFlowData.push({ x: new Date(event.date.getTime() - 1), y: -Math.min(0, cumulative) });
+                cumulative += event.amount;
+                cashFlowData.push({ x: event.date, y: -Math.min(0, cumulative) });
+                if (-cumulative > peakFunding) peakFunding = -cumulative;
+            });
+            cashFlowData.push({x: addDays(simStartDate, duration), y: cashFlowData[cashFlowData.length-1].y});
+            
+            let peakStartDate = null, peakEndDate = null;
+            if (peakFunding > 0) {
+                const peakPoints = cashFlowData.filter(p => p.y >= peakFunding * 0.999); 
+                if (peakPoints.length > 0) {
+                    peakStartDate = peakPoints[0].x;
+                    peakEndDate = peakPoints[peakPoints.length - 1].x;
+                }
+            }
+            return { cashFlowData, peakFunding, peakStartDate, peakEndDate };
+        }
+        
+        function runForecast() {
+            const salesGrowth = parseInt(document.getElementById('salesGrowth').value); const avgDIO = parseInt(document.getElementById('avgDIO').value); const avgDSO = parseInt(document.getElementById('avgDSO').value); const avgDPO = parseInt(document.getElementById('avgDPO').value);
+            const formatDate = (date) => date ? date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : 'N/A';
+            const formatCurrency = (num) => `₹${(num / 100000).toFixed(1)}L`;
+
+            document.getElementById('salesGrowthValue').textContent = `${salesGrowth > 0 ? '+' : ''}${salesGrowth}%`; document.getElementById('avgDIOValue').textContent = `${avgDIO} Days`; document.getElementById('avgDSOValue').textContent = `${avgDSO} Days`; document.getElementById('avgDPOValue').textContent = `${avgDPO} Days`;
+
+            const forecastData = JSON.parse(JSON.stringify(baseSimData));
+            const growthMultiplier = 1 + (salesGrowth / 100);
+
+            forecastData.forEach(order => {
+                order.illustration.cogs *= growthMultiplier;
+                order.analysis.forEach(line => { if (line.value.includes("INR")) { const numValue = parseFloat(line.value.replace(/[^\d.]/g, '')); line.value = `INR ${Math.round(numValue * growthMultiplier).toLocaleString('en-IN')}`; } });
+                const dioRatio = (order.illustration.rawMaterialDays / (order.illustration.rawMaterialDays + order.illustration.productionDays)); order.illustration.rawMaterialDays = Math.round(avgDIO * dioRatio); order.illustration.productionDays = Math.round(avgDIO * (1 - dioRatio));
+                const dsoRatio = (order.illustration.shippingTransitDays / (order.illustration.shippingTransitDays + order.illustration.customerCreditDays)); order.illustration.shippingTransitDays = Math.round(avgDSO * dsoRatio); order.illustration.customerCreditDays = Math.round(avgDSO * (1 - dsoRatio));
+                order.illustration.dpo = avgDPO; order.startDate = new Date(order.startDate);
+            });
+            
+            const { cashFlowData: baseCashFlow } = calculateCashFlow(baseSimData, new Date('2025-10-01'));
+            const { cashFlowData: forecastCashFlow, peakFunding: forecastPeak, peakStartDate, peakEndDate } = calculateCashFlow(forecastData, new Date('2025-10-01'));
+            
+            document.getElementById('forecast-peak-funding').textContent = formatCurrency(forecastPeak);
+            if (peakStartDate && peakEndDate && peakStartDate <= peakEndDate) {
+                const duration = Math.round((peakEndDate.getTime() - peakStartDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+                document.getElementById('forecast-peak-period').textContent = `${formatDate(peakStartDate)} - ${formatDate(peakEndDate)}`;
+                document.getElementById('forecast-peak-duration').textContent = `${duration} Day${duration > 1 ? 's' : ''}`;
+            } else {
+                 document.getElementById('forecast-peak-period').textContent = 'N/A';
+                 document.getElementById('forecast-peak-duration').textContent = '0 Days';
+            }
+            
+            let annotations = {};
+            if(peakStartDate && peakEndDate && peakStartDate <= peakEndDate) {
+                 annotations.peakPeriod = { type: 'box', xMin: peakStartDate.valueOf(), xMax: peakEndDate.valueOf(), backgroundColor: 'rgba(224, 231, 255, 0.5)', borderColor: 'rgba(59, 130, 246, 0.5)', borderWidth: 1 };
+            }
+            if(forecastChart.options.plugins.annotation) {
+                forecastChart.options.plugins.annotation.annotations = annotations;
+            }
+
+            forecastChart.data.datasets = [
+                { label: 'Baseline', data: baseCashFlow, borderColor: '#9CA3AF', tension: 0.1, pointRadius: 0, borderDash: [5, 5] },
+                { label: 'Forecast', data: forecastCashFlow, borderColor: '#3B82F6', backgroundColor: 'rgba(59, 130, 246, 0.1)', fill: true, tension: 0.1, pointRadius: 0 }
+            ];
+            forecastChart.update();
+        }
+
+        function calculateCustomCCC() {
+            const sales = parseFloat(document.getElementById('calc-sales').value) || 0;
+            const cogs = parseFloat(document.getElementById('calc-cogs').value) || 0;
+            const inventory = parseFloat(document.getElementById('calc-inventory').value) || 0;
+            const ar = parseFloat(document.getElementById('calc-ar').value) || 0;
+            const ap = parseFloat(document.getElementById('calc-ap').value) || 0;
+
+            const dio = cogs > 0 ? (inventory / cogs) * 365 : 0;
+            const dso = sales > 0 ? (ar / sales) * 365 : 0;
+            const dpo = cogs > 0 ? (ap / cogs) * 365 : 0;
+            const ccc = dio + dso - dpo;
+            const fundingGap = (ar + inventory) - ap;
+
+            document.getElementById('calc-dio-result').textContent = `${dio.toFixed(1)}`;
+            document.getElementById('calc-dso-result').textContent = `${dso.toFixed(1)}`;
+            document.getElementById('calc-dpo-result').textContent = `${dpo.toFixed(1)}`;
+            document.getElementById('ccc-calc-string').innerHTML = `
+                <span class="text-yellow-600">${dio.toFixed(1)}</span>
+                <span class="text-gray-500 text-lg mx-1">+</span>
+                <span class="text-blue-600">${dso.toFixed(1)}</span>
+                <span class="text-gray-500 text-lg mx-1">-</span>
+                <span class="text-green-600">${dpo.toFixed(1)}</span>
+                <span class="text-gray-500 text-lg mx-1">=</span>
+                <span class="text-red-600 text-2xl font-bold">${ccc.toFixed(1)} Days</span>`;
+            
+            document.getElementById('calc-funding-gap').textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(fundingGap);
+        }
+
+        function showSection(sectionId) {
+            navItems.forEach(item => document.getElementById(item.id).classList.add('hidden')); document.getElementById(sectionId).classList.remove('hidden');
+            navItems.forEach(item => {
+                document.getElementById(`nav-d-${item.id}`).classList.remove('active'); document.getElementById(`nav-m-${item.id}`).classList.remove('active', 'bg-var(--color-primary)', 'text-white'); document.getElementById(`nav-m-${item.id}`).classList.add('bg-gray-200', 'text-gray-700');
+            });
+            document.getElementById(`nav-d-${sectionId}`).classList.add('active');
+            document.getElementById(`nav-m-${sectionId}`).classList.remove('bg-gray-200', 'text-gray-700'); document.getElementById(`nav-m-${sectionId}`).classList.add('active', 'bg-var(--color-primary)', 'text-white');
+        }
+    </script>
+</body>
+</html>
