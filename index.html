@@ -163,15 +163,16 @@
             </div>
             <div class="card mt-12 p-8">
                 <h3 class="text-2xl font-bold text-center text-gray-800 mb-8">Your Learning Journey</h3>
-                <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-2 text-center text-sm font-semibold text-gray-700">
+                <div class="flex flex-wrap items-center justify-center gap-x-2 gap-y-4 text-center text-sm font-semibold text-gray-700">
                     <div class="w-40 text-center"><div class="mx-auto h-16 w-16 rounded-full bg-var(--color-primary) text-white flex items-center justify-center text-2xl font-bold mb-2">1</div>Case Studies</div><div class="text-2xl text-gray-300 font-light">→</div>
                     <div class="w-40 text-center"><div class="mx-auto h-16 w-16 rounded-full bg-var(--color-primary) text-white flex items-center justify-center text-2xl font-bold mb-2">2</div>Concepts & KPIs</div><div class="text-2xl text-gray-300 font-light">→</div>
                     <div class="w-40 text-center"><div class="mx-auto h-16 w-16 rounded-full bg-var(--color-primary) text-white flex items-center justify-center text-2xl font-bold mb-2">3</div>Illustrations</div><div class="text-2xl text-gray-300 font-light">→</div>
-                    <div class="w-40 text-center"><div class="mx-auto h-16 w-16 rounded-full bg-var(--color-primary) text-white flex items-center justify-center text-2xl font-bold mb-2">4</div>Simulation</div><div class="text-2xl text-gray-300 font-light">→</div>
+                    <div class="w-40 text-center"><div class="mx-auto h-16 w-16 rounded-full bg-var(--color-primary) text-white flex items-center justify-center text-2xl font-bold mb-2">4</div>Portfolio Simulation</div><div class="text-2xl text-gray-300 font-light">→</div>
                     <div class="w-40 text-center"><div class="mx-auto h-16 w-16 rounded-full bg-var(--color-primary) text-white flex items-center justify-center text-2xl font-bold mb-2">5</div>Forecasting</div><div class="text-2xl text-gray-300 font-light">→</div>
-                    <div class="w-40 text-center"><div class="mx-auto h-16 w-16 rounded-full bg-var(--color-primary) text-white flex items-center justify-center text-2xl font-bold mb-2">6</div>Calculators</div>
+                    <div class="w-40 text-center"><div class="mx-auto h-16 w-16 rounded-full bg-var(--color-primary) text-white flex items-center justify-center text-2xl font-bold mb-2">6</div>Calculators</div><div class="text-2xl text-gray-300 font-light">→</div>
+                    <div class="w-40 text-center"><div class="mx-auto h-16 w-16 rounded-full bg-var(--color-primary) text-white flex items-center justify-center text-2xl font-bold mb-2">7</div>Currency Risk</div><div class="text-2xl text-gray-300 font-light">→</div>
+                    <div class="w-40 text-center"><div class="mx-auto h-16 w-16 rounded-full bg-var(--color-primary) text-white flex items-center justify-center text-2xl font-bold mb-2">8</div>Financing Costs</div>
                 </div>
-                 <p class="text-center text-gray-500 mt-8 max-w-4xl mx-auto">Start with <strong>Case Studies</strong>, understand the <strong>Concepts & KPIs</strong>, see them applied in the <strong>Illustrations</strong> and <strong>Simulation</strong>, then use the <strong>Forecasting</strong> and <strong>Calculators</strong> tools for strategic planning.</p>
             </div>
         </section>
 
@@ -330,28 +331,45 @@
         </section>
         
         <section id="simulation" class="hidden">
-             <div class="text-center mb-10"><h2 class="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">Portfolio Simulation</h2><p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">This is where it all comes together. We now simulate all five orders running concurrently to see their combined impact on your company's cash flow.</p></div>
-             <div class="card p-6 md:p-8">
-                 <div class="mb-12">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4">Step 1: Simulation Setup & Data</h3>
-                    <p class="text-sm text-gray-600 mb-4">First, we lay out the timeline and funding needs for each order based on their specific terms. This data will drive the simulation.</p>
-                    <div class="overflow-x-auto"><table class="min-w-full text-sm text-left"><thead class="bg-gray-50 text-xs text-gray-700 uppercase"><tr><th class="px-4 py-2">Order</th><th class="px-4 py-2">Start Date</th><th class="px-4 py-2">Cash Out Date<br><span class="font-normal normal-case">(Start + DPO)</span></th><th class="px-4 py-2">Cash In Date<br><span class="font-normal normal-case">(Start + DIO + DSO)</span></th><th class="px-4 py-2">Funding Gap<br><span class="font-normal normal-case">(CCC)</span></th><th class="px-4 py-2">Amount to Fund<br><span class="font-normal normal-case">(COGS)</span></th></tr></thead><tbody id="simulation-setup-table" class="divide-y"></tbody></table></div>
-                </div>
-                <div class="mb-12">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4">Step 2: Concurrent Order Timelines (Gantt Chart)</h3>
-                     <div class="flex items-center space-x-4 text-xs mb-4">
-                        <div class="flex items-center"><div class="w-4 h-4 bg-green-500 rounded-sm mr-2"></div><span>Supplier Credit (DPO - Interest-Free)</span></div>
-                        <div class="flex items-center"><div class="w-4 h-4 bg-red-500 rounded-sm mr-2"></div><span>Funding Gap (CCC - Capital Required)</span></div>
+             <div class="text-center mb-10"><h2 class="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">Dynamic Portfolio Simulation</h2><p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Add multiple orders with different timelines to simulate the real-time "stacking effect" on your cash flow and total funding requirement.</p></div>
+             
+             <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                <div class="xl:col-span-1 space-y-8">
+                    <div class="card p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Add New Order/Invoice</h3>
+                        <div id="add-order-form" class="space-y-4">
+                            <div><label class="text-sm font-semibold">Order Name</label><input type="text" id="sim-order-name" class="calculator-input" placeholder="e.g., PO-123 USA"></div>
+                            <div><label class="text-sm font-semibold">Start Date</label><input type="date" id="sim-start-date" class="calculator-input"></div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div><label class="text-sm font-semibold">Invoice Value</label><input type="number" id="sim-invoice-value" class="calculator-input" placeholder="e.g., 10000000"></div>
+                                <div><label class="text-sm font-semibold">Gross Margin (%)</label><input type="number" id="sim-margin" class="calculator-input" placeholder="e.g., 40"></div>
+                            </div>
+                            <div class="grid grid-cols-3 gap-2">
+                                <div><label class="text-sm font-semibold">DPO</label><input type="number" id="sim-dpo" class="calculator-input" placeholder="Days"></div>
+                                <div><label class="text-sm font-semibold">DIO</label><input type="number" id="sim-dio" class="calculator-input" placeholder="Days"></div>
+                                <div><label class="text-sm font-semibold">DSO</label><input type="number" id="sim-dso" class="calculator-input" placeholder="Days"></div>
+                            </div>
+                            <button type="button" id="add-order-btn" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">Add Order to Simulation</button>
+                        </div>
                     </div>
-                    <div class="p-2 border rounded-lg overflow-x-auto"><div id="gantt-chart-container" class="space-y-4 text-sm font-semibold" style="min-width: 600px;"></div></div>
+                    <div class="card p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Key Treasury Insights</h3>
+                        <div class="bg-red-100 p-4 rounded-lg text-center"><p class="text-sm font-semibold text-red-800">Peak Funding Requirement</p><p id="peak-funding" class="text-3xl font-bold text-red-700"></p><p class="text-xs text-red-600">The maximum capital needed at any single point in time.</p></div>
+                    </div>
                 </div>
-                <div class="mb-12"><h3 class="text-xl font-bold text-gray-800 mb-4">Step 3: Simulated Working Capital Requirement</h3><div class="relative w-full h-80 md:h-96"><canvas id="cashFlowChart"></canvas></div></div>
-                <div class="bg-gray-50 p-6 rounded-lg"><h4 class="text-xl font-bold text-gray-800 mb-4">Key Treasury Insights</h4><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div class="bg-red-100 p-4 rounded-lg text-center"><p class="text-sm font-semibold text-red-800">Peak Funding Requirement</p><p id="peak-funding" class="text-3xl font-bold text-red-700"></p><p class="text-xs text-red-600">This is the maximum capital needed at any single point in time.</p></div><div class="text-gray-700"><p class="font-semibold">The Stacking Effect:</p><p>Notice how the funding requirements of individual orders "stack" on top of each other. The peak is not determined by the largest single order, but by the maximum overlap of multiple orders. This simulation reveals your true credit line requirement.</p></div></div></div>
+
+                <div class="xl:col-span-2 card p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Live Portfolio</h3>
+                    <div class="overflow-x-auto mb-8"><table class="min-w-full text-sm text-left"><thead class="bg-gray-50 text-xs text-gray-700 uppercase"><tr><th class="px-4 py-2">Order</th><th class="px-4 py-2">Cash Out</th><th class="px-4 py-2">Cash In</th><th class="px-4 py-2">CCC</th><th class="px-4 py-2">Amount Funded (COGS)</th><th class="px-4 py-2">Action</th></tr></thead><tbody id="simulation-order-table" class="divide-y"></tbody></table></div>
+                    
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Simulated Working Capital</h3>
+                    <div class="relative w-full h-80 md:h-96"><canvas id="cashFlowChart"></canvas></div>
+                </div>
              </div>
         </section>
         
         <section id="forecasting" class="hidden">
-            <div class="text-center mb-10"><h2 class="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">Forecasting & Sensitivity Analysis</h2><p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Move from analysis to strategic planning. Use these sliders to model different business scenarios and instantly see the impact on your peak funding needs.</p></div>
+            <div class="text-center mb-10"><h2 class="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">Forecasting & Scenario Planning</h2><p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Model business scenarios to see the impact on peak funding. Save scenarios to compare different strategies on the chart.</p></div>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div class="lg:col-span-1 card p-6">
                     <h3 class="text-xl font-bold text-gray-800 mb-6">Scenario Control Panel</h3>
@@ -361,18 +379,17 @@
                         <div><label for="avgDSO" class="font-semibold">Average DSO (Days)</label><input type="range" id="avgDSO" min="30" max="150" value="90" oninput="runForecast()"><span id="avgDSOValue" class="text-sm text-gray-600 block text-center font-medium"></span></div>
                         <div><label for="avgDPO" class="font-semibold">Average DPO (Days)</label><input type="range" id="avgDPO" min="15" max="90" value="45" oninput="runForecast()"><span id="avgDPOValue" class="text-sm text-gray-600 block text-center font-medium"></span></div>
                     </div>
+                    <div class="mt-6 pt-6 border-t">
+                        <input type="text" id="scenarioName" placeholder="Scenario Name (e.g., High Growth)" class="calculator-input mb-2">
+                        <button id="saveScenarioBtn" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">Save Scenario</button>
+                    </div>
                 </div>
                 <div class="lg:col-span-2 card p-6">
                     <h3 class="text-xl font-bold text-gray-800 mb-4">Forecasted Working Capital</h3>
                     <div class="relative w-full h-80 md:h-96"><canvas id="forecastChart"></canvas></div>
                     <div class="mt-6 bg-gray-50 p-6 rounded-lg">
-                        <h4 class="text-xl font-bold text-gray-800 mb-4">Forecast Insights</h4>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
-                            <div class="bg-blue-100 p-4 rounded-lg"><p class="text-sm font-semibold text-blue-800">Peak Funding Amount</p><p id="forecast-peak-funding" class="text-2xl font-bold text-blue-700"></p></div>
-                            <div class="bg-blue-100 p-4 rounded-lg"><p class="text-sm font-semibold text-blue-800">Peak Funding Period</p><p id="forecast-peak-period" class="text-sm font-bold text-blue-700"></p></div>
-                            <div class="bg-blue-100 p-4 rounded-lg"><p class="text-sm font-semibold text-blue-800">Peak Funding Duration</p><p id="forecast-peak-duration" class="text-2xl font-bold text-blue-700"></p></div>
-                        </div>
-                         <p class="text-xs text-gray-500 mt-4 text-center">Knowing the exact period and duration of maximum capital strain is critical for negotiating the right type and tenor of credit facilities.</p>
+                        <h4 class="text-xl font-bold text-gray-800 mb-4">Saved Scenarios</h4>
+                        <div id="scenario-list" class="space-y-2"></div>
                     </div>
                 </div>
             </div>
@@ -410,6 +427,88 @@
             </div>
         </section>
 
+        <section id="currencyrisk" class="hidden">
+            <div class="text-center mb-10"><h2 class="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">Currency Risk Simulator</h2><p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Model the financial outcome of an export invoice based on different hedging strategies and future market movements.</p></div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="lg:col-span-1 card p-6">
+                     <h3 class="text-xl font-bold text-gray-800 mb-6">Transaction Inputs</h3>
+                     <div class="space-y-4">
+                        <div><label class="font-semibold text-sm">Invoice Amount (FCY)</label><input type="number" id="cr-amount" class="calculator-input" value="100000" oninput="calculateCurrencyRisk()"></div>
+                        <div><label class="font-semibold text-sm">Currency</label>
+                            <select id="cr-currency" class="calculator-input" onchange="calculateCurrencyRisk()">
+                                <option value="USD">USD</option><option value="EUR">EUR</option><option value="GBP">GBP</option>
+                            </select>
+                        </div>
+                        <div><label class="font-semibold text-sm">Current Spot Rate (e.g., USD/INR)</label><input type="number" id="cr-spot" class="calculator-input" value="83.50" oninput="calculateCurrencyRisk()"></div>
+                        <div><label class="font-semibold text-sm">Forward Rate Booked (Hedged)</label><input type="number" id="cr-forward" class="calculator-input" value="83.75" oninput="calculateCurrencyRisk()"></div>
+                    </div>
+                </div>
+                <div class="lg:col-span-2 card p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Simulated Outcomes</h3>
+                    <div>
+                        <label for="cr-future-spot" class="font-semibold">Simulated Spot Rate on Payment Date</label>
+                        <input type="range" id="cr-future-spot" min="80" max="86" step="0.01" value="83.50" oninput="calculateCurrencyRisk()">
+                        <span id="cr-future-spot-value" class="text-sm text-gray-600 block text-center font-medium"></span>
+                    </div>
+                    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg text-center">
+                            <h4 class="font-semibold">Hedged Outcome</h4>
+                            <p class="text-2xl font-bold text-green-600" id="cr-hedged-result"></p>
+                            <p class="text-xs text-gray-500">Guaranteed INR Realization</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg text-center">
+                            <h4 class="font-semibold">Unhedged Outcome</h4>
+                            <p class="text-2xl font-bold text-blue-600" id="cr-unhedged-result"></p>
+                            <p class="text-xs text-gray-500">Based on Simulated Spot Rate</p>
+                        </div>
+                    </div>
+                    <div class="mt-6 bg-blue-50 p-6 rounded-lg text-center">
+                        <h4 class="text-lg font-bold text-blue-800">Result of Hedging</h4>
+                        <p class="text-3xl font-extrabold" id="cr-final-result"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="financingcosts" class="hidden">
+            <div class="text-center mb-10"><h2 class="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">Financing Cost Calculator</h2><p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Compare the interest costs of different short-term credit facilities to bridge your funding gap.</p></div>
+            <div class="card p-8 max-w-6xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                     <div><label class="font-semibold">Funding Gap Amount (INR)</label><input type="number" id="fc-amount" class="calculator-input" value="2500000" oninput="calculateFinancingCosts()"></div>
+                     <div><label class="font-semibold">Funding Duration (Days)</label><input type="number" id="fc-duration" class="calculator-input" value="90" oninput="calculateFinancingCosts()"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h4 class="font-bold text-lg text-center mb-4">Packing Credit (Pre-Shipment)</h4>
+                        <label class="font-semibold text-sm">Annual Interest Rate (%)</label>
+                        <input type="number" id="fc-pc-rate" class="calculator-input" value="9.5" oninput="calculateFinancingCosts()">
+                        <div class="mt-4 pt-4 border-t text-center">
+                            <p class="text-sm text-gray-600">Total Interest Cost</p>
+                            <p class="text-2xl font-bold text-red-600" id="fc-pc-result"></p>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h4 class="font-bold text-lg text-center mb-4">Bill Discounting (Post-Shipment)</h4>
+                        <label class="font-semibold text-sm">Annual Discount Rate (%)</label>
+                        <input type="number" id="fc-bd-rate" class="calculator-input" value="8.75" oninput="calculateFinancingCosts()">
+                         <div class="mt-4 pt-4 border-t text-center">
+                            <p class="text-sm text-gray-600">Total Discount Cost</p>
+                            <p class="text-2xl font-bold text-red-600" id="fc-bd-result"></p>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h4 class="font-bold text-lg text-center mb-4">Bank Overdraft / CC</h4>
+                        <label class="font-semibold text-sm">Annual Interest Rate (%)</label>
+                        <input type="number" id="fc-od-rate" class="calculator-input" value="11.0" oninput="calculateFinancingCosts()">
+                         <div class="mt-4 pt-4 border-t text-center">
+                            <p class="text-sm text-gray-600">Total Interest Cost</p>
+                            <p class="text-2xl font-bold text-red-600" id="fc-od-result"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section id="zoho" class="hidden">
             <div class="text-center mb-10"><h2 class="text-3xl md:text-4xl font-bold text-gray-800 tracking-tight">Zoho Books Implementation Guide</h2><p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">A practical, step-by-step process for implementing the Unified Export Costing Framework within Zoho Books.</p></div>
             <div class="max-w-4xl mx-auto space-y-4" id="zoho-accordion"></div>
@@ -429,26 +528,42 @@
             { id: 'simulation', label: 'Portfolio Simulation' }, 
             { id: 'forecasting', label: 'Forecasting' }, 
             { id: 'calculators', label: 'Calculators' },
+            { id: 'currencyrisk', label: 'Currency Risk' },
+            { id: 'financingcosts', label: 'Financing Costs' },
             { id: 'zoho', label: 'Zoho Setup' },
         ];
         const caseStudiesData = [
-            { title: "Case 1: Baseline USD", description: "This case illustrates the fundamental risk of an unhedged transaction, where profitability is directly exposed to currency market volatility.", currency: "USD", treasuryAction: "Not hedged. Converted at spot rate on receipt.", paymentTerm: "90 days from B/L date", marketData: ["Spot USD/INR on PO Date: 81.60", "Spot USD/INR on Payment Date: 82.15", "Pre-Shipment Finance (90 days @ 9.90%)", "Post-Shipment Finance (90 days @ 9.90%)"], analysis: [ { label: "Invoice Value (FCY)", value: "USD 150,000" }, { label: "Gross Realization in INR", value: "INR 12,322,500", bold: true }, { label: "Less: Total Transaction Costs", value: "", header: true }, { label: "Pre-Shipment Credit Interest", value: "INR 122,055", sub: true }, { label: "Post-Shipment Credit Interest", value: "INR 298,636", sub: true }, { label: "Freight & Insurance (CIF)", value: "INR 750,000", sub: true }, { label: "Banking & Swift Charges", value: "INR 8,500", sub: true }, { label: "Total Transaction Costs", value: "INR 1,179,191", bold: true, sub: true }, { label: "Net Realization in INR", value: "INR 11,143,309", bold: true }, { label: "Forex Gain / Loss", value: "INR 82,500 (Gain)", highlight: 'green' } ], chartData: { costs: [122055, 298636, 750000, 8500], costLabels: ["Pre-Ship Interest", "Post-Ship Interest", "Freight & Insurance", "Bank Charges"], net: 11143309 }, illustration: { dpo: 45, rawMaterialDays: 30, productionDays: 60, shippingTransitDays: 20, customerCreditDays: 70, cogs: 9241875, apValue: 5545125 } },
-            { title: "Case 2: Hedged EUR", description: "Demonstrates how a forward contract eliminates uncertainty and locks in a guaranteed profit margin, avoiding a potential loss.", currency: "EUR", treasuryAction: "Booked a 3-month forward contract to sell EUR 200,000.", paymentTerm: "90 days from B/L date", marketData: ["Spot EUR/INR on PO Date: 89.65", "3-Month Forward Rate Booked: 90.10", "Spot EUR/INR on Payment Date: 89.20"], analysis: [ { label: "Invoice Value (FCY)", value: "EUR 200,000" }, { label: "Gross Realization in INR (Locked-in)", value: "INR 18,020,000", bold: true }, { label: "Less: Total Transaction Costs", value: "", header: true }, { label: "Pre-Shipment Credit Interest", value: "INR 197,260", sub: true }, { label: "Post-Shipment Credit Interest", value: "INR 440,008", sub: true }, { label: "Banking & Forward Booking Charges", value: "INR 11,000", sub: true }, { label: "Total Transaction Costs", value: "INR 648,268", bold: true, sub: true }, { label: "Net Realization in INR", value: "INR 17,371,732", bold: true }, { label: "Forex Loss Avoided by Hedging", value: "INR 180,000", highlight: 'green' } ], chartData: { costs: [197260, 440008, 11000], costLabels: ["Pre-Ship Interest", "Post-Ship Interest", "Bank & Fwd Charges"], net: 17371732 }, illustration: { dpo: 45, rawMaterialDays: 30, productionDays: 60, shippingTransitDays: 20, customerCreditDays: 70, cogs: 13515000, apValue: 8109000 } },
-            { title: "Case 3: Cost of Delay GBP", description: "Highlights how operational failures in the supply chain can lead to significant, unbudgeted financial penalties that erode profitability.", currency: "GBP", treasuryAction: "Hedged with a 2-month forward contract.", paymentTerm: "60 days from B/L date", marketData: ["Spot GBP/INR on PO Date: 106.50", "2-Month Forward Rate Booked: 107.05", "Demurrage: 5 days @ GBP 150/day", "Detention: 3 days @ GBP 100/day"], analysis: [ { label: "Invoice Value (FCY)", value: "GBP 100,000" }, { label: "Gross Realization in INR (Locked-in)", value: "INR 10,705,000", bold: true }, { label: "Less: Total Transaction Costs", value: "", header: true }, { label: "Pre-Shipment Credit Interest", value: "INR 78,904", sub: true }, { label: "Post-Shipment Credit Interest", value: "INR 174,013", sub: true }, { label: "Freight, Duties & Transport (DDP)", value: "INR 1,200,000", sub: true }, { label: "Banking & Swift Charges", value: "INR 8,500", sub: true }, { label: "Contingent Costs", value: "INR 112,140", sub: true, highlight: 'red' }, { label: "Total Transaction Costs", value: "INR 1,573,557", bold: true, sub: true }, { label: "Net Realization in INR", value: "INR 9,131,443", bold: true }, ], chartData: { costs: [78904, 174013, 1200000, 8500, 112140], costLabels: ["Pre-Ship Interest", "Post-Ship Interest", "Logistics", "Bank Charges", "Demurrage"], net: 9131443 }, illustration: { dpo: 45, rawMaterialDays: 20, productionDays: 40, shippingTransitDays: 15, customerCreditDays: 45, cogs: 8028750, apValue: 4817250 } },
-            { title: "Case 4: Volatility JPY", description: "Compares the outcomes for a shipment in a volatile currency, quantifying the value and opportunity cost of hedging.", currency: "JPY", treasuryAction: "Analyzed both Unhedged and Hedged scenarios.", paymentTerm: "90 days from B/L date", marketData: ["Spot JPY/INR (per 100) on PO Date: 55.80", "3-Month Forward Rate: 56.10", "Spot JPY/INR (per 100) on Payment Date: 57.50"], analysis: [ { label: "Gross Realization (Unhedged)", value: "INR 14,375,000", bold: true }, { label: "Gross Realization (Hedged)", value: "INR 14,025,000", bold: true }, { label: "Net Realization (Unhedged)", value: "INR 12,367,292", bold: true }, { label: "Net Realization (Hedged)", value: "INR 12,023,458", bold: true }, { label: "Forex Gain (Unhedged)", value: "INR 425,000 (Gain)", highlight: 'green' }, { label: "Opportunity Cost of Hedging", value: "INR 343,834", highlight: 'orange' } ], chartData: { type: 'grouped', unhedged: { net: 12367292, costs: 2007708 }, hedged: { net: 12023458, costs: 2001542 } }, illustration: { dpo: 45, rawMaterialDays: 30, productionDays: 60, shippingTransitDays: 20, customerCreditDays: 70, cogs: 10781250, apValue: 6468750 } },
-            { title: "Case 5: Long Credit AUD", description: "Examines the direct cost of offering extended credit terms and the significant impact of post-shipment financing choices.", currency: "AUD", treasuryAction: "Hedged with a 4-month forward contract.", paymentTerm: "120 days from B/L date", marketData: ["Spot AUD/INR on PO Date: 55.20", "4-Month Forward Rate Booked: 55.65", "Post-Shipment Finance (120 days @ 9.90%)"], analysis: [ { label: "Invoice Value (FCY)", value: "AUD 250,000" }, { label: "Gross Realization in INR (Locked-in)", value: "INR 13,912,500", bold: true }, { label: "Less: Total Transaction Costs", value: "", header: true }, { label: "Pre-Shipment Credit Interest", value: "INR 157,808", sub: true }, { label: "Post-Shipment Credit Interest (120 days)", value: "INR 452,518", sub: true, highlight: 'red' }, { label: "Banking & Swift Charges", value: "INR 8,500", sub: true }, { label: "Total Transaction Costs", value: "INR 618,826", bold: true, sub: true }, { label: "Net Realization in INR", value: "INR 13,293,674", bold: true } ], chartData: { costs: [157808, 452518, 8500], costLabels: ["Pre-Ship Interest", "Post-Ship Interest (120d)", "Bank Charges"], net: 13293674 }, illustration: { dpo: 45, rawMaterialDays: 30, productionDays: 60, shippingTransitDays: 30, customerCreditDays: 90, cogs: 10434375, apValue: 6260625 } }
+            { title: "Case 1: Baseline USD", description: "This case illustrates the fundamental risk of an unhedged transaction, where profitability is directly exposed to currency market volatility.", currency: "USD", treasuryAction: "Not hedged. Converted at spot rate on receipt.", paymentTerm: "90 days from B/L date", marketData: ["Spot USD/INR on PO Date: 81.60", "Spot USD/INR on Payment Date: 82.15", "Pre-Shipment Finance (90 days @ 9.90%)", "Post-Shipment Finance (90 days @ 9.90%)"], analysis: [ { label: "Invoice Value (FCY)", value: "USD 150,000" }, { label: "Gross Realization in INR", value: "INR 12,322,500", bold: true }, { label: "Less: Total Transaction Costs", value: "", header: true }, { label: "Pre-Shipment Credit Interest", value: "INR 122,055", sub: true }, { label: "Post-Shipment Credit Interest", value: "INR 298,636", sub: true }, { label: "Freight & Insurance (CIF)", value: "INR 750,000", sub: true }, { label: "Banking & Swift Charges", value: "INR 8,500", sub: true }, { label: "Total Transaction Costs", value: "INR 1,179,191", bold: true, sub: true }, { label: "Net Realization in INR", value: "INR 11,143,309", bold: true }, { label: "Forex Gain / Loss", value: "INR 82,500 (Gain)", highlight: 'green' } ], chartData: { costs: [122055, 298636, 750000, 8500], costLabels: ["Pre-Ship Interest", "Post-Ship Interest", "Freight & Insurance", "Bank Charges"], net: 11143309 }, illustration: { invoiceValue: 12322500, dpo: 45, rawMaterialDays: 30, productionDays: 60, shippingTransitDays: 20, customerCreditDays: 70, cogs: 9241875, apValue: 5545125 } },
+            { title: "Case 2: Hedged EUR", description: "Demonstrates how a forward contract eliminates uncertainty and locks in a guaranteed profit margin, avoiding a potential loss.", currency: "EUR", treasuryAction: "Booked a 3-month forward contract to sell EUR 200,000.", paymentTerm: "90 days from B/L date", marketData: ["Spot EUR/INR on PO Date: 89.65", "3-Month Forward Rate Booked: 90.10", "Spot EUR/INR on Payment Date: 89.20"], analysis: [ { label: "Invoice Value (FCY)", value: "EUR 200,000" }, { label: "Gross Realization in INR (Locked-in)", value: "INR 18,020,000", bold: true }, { label: "Less: Total Transaction Costs", value: "", header: true }, { label: "Pre-Shipment Credit Interest", value: "INR 197,260", sub: true }, { label: "Post-Shipment Credit Interest", value: "INR 440,008", sub: true }, { label: "Banking & Forward Booking Charges", value: "INR 11,000", sub: true }, { label: "Total Transaction Costs", value: "INR 648,268", bold: true, sub: true }, { label: "Net Realization in INR", value: "INR 17,371,732", bold: true }, { label: "Forex Loss Avoided by Hedging", value: "INR 180,000", highlight: 'green' } ], chartData: { costs: [197260, 440008, 11000], costLabels: ["Pre-Ship Interest", "Post-Ship Interest", "Bank & Fwd Charges"], net: 17371732 }, illustration: { invoiceValue: 18020000, dpo: 45, rawMaterialDays: 30, productionDays: 60, shippingTransitDays: 20, customerCreditDays: 70, cogs: 13515000, apValue: 8109000 } },
+            { title: "Case 3: Cost of Delay GBP", description: "Highlights how operational failures in the supply chain can lead to significant, unbudgeted financial penalties that erode profitability.", currency: "GBP", treasuryAction: "Hedged with a 2-month forward contract.", paymentTerm: "60 days from B/L date", marketData: ["Spot GBP/INR on PO Date: 106.50", "2-Month Forward Rate Booked: 107.05", "Demurrage: 5 days @ GBP 150/day", "Detention: 3 days @ GBP 100/day"], analysis: [ { label: "Invoice Value (FCY)", value: "GBP 100,000" }, { label: "Gross Realization in INR (Locked-in)", value: "INR 10,705,000", bold: true }, { label: "Less: Total Transaction Costs", value: "", header: true }, { label: "Pre-Shipment Credit Interest", value: "INR 78,904", sub: true }, { label: "Post-Shipment Credit Interest", value: "INR 174,013", sub: true }, { label: "Freight, Duties & Transport (DDP)", value: "INR 1,200,000", sub: true }, { label: "Banking & Swift Charges", value: "INR 8,500", sub: true }, { label: "Contingent Costs", value: "INR 112,140", sub: true, highlight: 'red' }, { label: "Total Transaction Costs", value: "INR 1,573,557", bold: true, sub: true }, { label: "Net Realization in INR", value: "INR 9,131,443", bold: true }, ], chartData: { costs: [78904, 174013, 1200000, 8500, 112140], costLabels: ["Pre-Ship Interest", "Post-Ship Interest", "Logistics", "Bank Charges", "Demurrage"], net: 9131443 }, illustration: { invoiceValue: 10705000, dpo: 45, rawMaterialDays: 20, productionDays: 40, shippingTransitDays: 15, customerCreditDays: 45, cogs: 8028750, apValue: 4817250 } },
+            { title: "Case 4: Volatility JPY", description: "Compares the outcomes for a shipment in a volatile currency, quantifying the value and opportunity cost of hedging.", currency: "JPY", treasuryAction: "Analyzed both Unhedged and Hedged scenarios.", paymentTerm: "90 days from B/L date", marketData: ["Spot JPY/INR (per 100) on PO Date: 55.80", "3-Month Forward Rate: 56.10", "Spot JPY/INR (per 100) on Payment Date: 57.50"], analysis: [ { label: "Gross Realization (Unhedged)", value: "INR 14,375,000", bold: true }, { label: "Gross Realization (Hedged)", value: "INR 14,025,000", bold: true }, { label: "Net Realization (Unhedged)", value: "INR 12,367,292", bold: true }, { label: "Net Realization (Hedged)", value: "INR 12,023,458", bold: true }, { label: "Forex Gain (Unhedged)", value: "INR 425,000 (Gain)", highlight: 'green' }, { label: "Opportunity Cost of Hedging", value: "INR 343,834", highlight: 'orange' } ], chartData: { type: 'grouped', unhedged: { net: 12367292, costs: 2007708 }, hedged: { net: 12023458, costs: 2001542 } }, illustration: { invoiceValue: 14025000, dpo: 45, rawMaterialDays: 30, productionDays: 60, shippingTransitDays: 20, customerCreditDays: 70, cogs: 10781250, apValue: 6468750 } },
+            { title: "Case 5: Long Credit AUD", description: "Examines the direct cost of offering extended credit terms and the significant impact of post-shipment financing choices.", currency: "AUD", treasuryAction: "Hedged with a 4-month forward contract.", paymentTerm: "120 days from B/L date", marketData: ["Spot AUD/INR on PO Date: 55.20", "4-Month Forward Rate Booked: 55.65", "Post-Shipment Finance (120 days @ 9.90%)"], analysis: [ { label: "Invoice Value (FCY)", value: "AUD 250,000" }, { label: "Gross Realization in INR (Locked-in)", value: "INR 13,912,500", bold: true }, { label: "Less: Total Transaction Costs", value: "", header: true }, { label: "Pre-Shipment Credit Interest", value: "INR 157,808", sub: true }, { label: "Post-Shipment Credit Interest (120 days)", value: "INR 452,518", sub: true, highlight: 'red' }, { label: "Banking & Swift Charges", value: "INR 8,500", sub: true }, { label: "Total Transaction Costs", value: "INR 618,826", bold: true, sub: true }, { label: "Net Realization in INR", value: "INR 13,293,674", bold: true } ], chartData: { costs: [157808, 452518, 8500], costLabels: ["Pre-Ship Interest", "Post-Ship Interest (120d)", "Bank Charges"], net: 13293674 }, illustration: { invoiceValue: 13912500, dpo: 45, rawMaterialDays: 30, productionDays: 60, shippingTransitDays: 30, customerCreditDays: 90, cogs: 10434375, apValue: 6260625 } }
         ];
         const zohoGuideData = [
             { title: "1. Foundational Setup", content: `<p class="mb-4">Before tracking orders, configure your Zoho Books account for export operations.</p><ul class="list-disc pl-5 space-y-2"><li><strong>Customize Chart of Accounts:</strong> Create specific expense accounts (e.g., 'Export: Pre-Shipment Interest', 'Export: Bill Discounting Charges') for accurate tracking.</li><li><strong>Enable Multi-Currency:</strong> Add all foreign currencies you transact in.</li><li><strong>Set Up Items:</strong> Define raw materials and finished goods to track inventory for accurate COGS calculation.</li></ul>` }, { title: "2. Tracking an Export Order as a Project", content: `<p class="mb-4">This is the core of the PO-centric costing method. Each export PO becomes a distinct profit center.</p><ul class="list-disc pl-5 space-y-2"><li><strong>Enable Projects Module:</strong> Ensure the 'Timesheet' module is enabled in settings.</li><li><strong>Create a Project for Each PO:</strong> When a new export PO is received, create a new project. Use the PO number as the project name (e.g., "PO-123-USA").</li></ul>` }, { title: "3. Recording Costs & Revenue", content: `<p class="mb-4">Meticulously link every single transaction to its corresponding project.</p><ul class="list-disc pl-5 space-y-2"><li><strong>Record Expenses:</strong> For all costs (interest, bank charges, freight), you must select the customer and associate it with the correct <strong>Project</strong>.</li><li><strong>Create Export Invoice:</strong> When creating the sales invoice, link it to the same project.</li></ul>` }, { title: "4. Analyzing Profitability", content: `<p class="mb-4">With all data tracked, you can now view the true profitability of each export order.</p><ul class="list-disc pl-5 space-y-2"><li><strong>Run the Project Profitability Report:</strong> Navigate to 'Reports' > 'Projects' > 'Profit and Loss for Projects'.</li><li><strong>Filter by Project:</strong> Select the specific project to generate its P&L statement, showing true net profit.</li></ul>` }
         ];
         let costChart, cashFlowChart, forecastChart;
-        let baseSimData = [];
+        let savedScenarios = [];
+        let userPortfolio = [];
 
         document.addEventListener('DOMContentLoaded', () => {
             setupNavigation(); setupSelectors(); setupZohoAccordion(); initCharts();
-            displayCaseStudy(0); displayIllustration(0); renderPortfolioSimulation(); runForecast(); calculateCustomCCC(); showSection('home');
+            displayCaseStudy(0); displayIllustration(0);
+            
+            document.getElementById('add-order-btn').addEventListener('click', addOrderToPortfolio);
+            initializeDynamicSimulation();
+            
+            updateSliderDisplay(); 
+            runForecast(); 
+            
+            calculateCustomCCC(); calculateCurrencyRisk(); calculateFinancingCosts();
+            showSection('home');
+            
+            document.getElementById('saveScenarioBtn').addEventListener('click', saveScenario);
         });
-
+        
+        // --- All setup, display, and chart functions ---
+        
         function setupNavigation() {
             const desktopNav = document.getElementById('desktop-nav'); const mobileNav = document.getElementById('mobile-nav');
             navItems.forEach(item => {
@@ -467,7 +582,9 @@
         }
 
         function setupZohoAccordion() {
-            const accordionContainer = document.getElementById('zoho-accordion'); accordionContainer.innerHTML = '';
+             const accordionContainer = document.getElementById('zoho-accordion');
+            if(!accordionContainer) return;
+            accordionContainer.innerHTML = '';
             zohoGuideData.forEach((item) => {
                 const div = document.createElement('div'); div.className = 'card overflow-hidden';
                 div.innerHTML = `<button class="accordion-header w-full text-left p-4 font-semibold text-gray-800 flex justify-between items-center hover:bg-var(--color-accent)"><span>${item.title}</span><span class="transform transition-transform duration-300 text-var(--color-primary) text-xl">&#x25BC;</span></button><div class="accordion-content"><div class="p-4 bg-gray-50 text-gray-600 border-t">${item.content}</div></div>`;
@@ -494,7 +611,7 @@
         }
         
         function displayIllustration(index) {
-            const study = caseStudiesData[index]; const ill = study.illustration; const grossRealization = parseFloat(study.analysis.find(r => r.label.includes("Gross Realization")).value.replace(/[^\d.]/g, ''));
+            const study = caseStudiesData[index]; const ill = study.illustration;
             const dio = ill.rawMaterialDays + ill.productionDays; const dso = ill.shippingTransitDays + ill.customerCreditDays; const dpo = ill.dpo; const ccc = dio + dso - dpo;
             const formatCurrency = (num) => `₹${(num / 100000).toFixed(1)}L`;
             document.getElementById('illustration-title').textContent = study.title;
@@ -508,8 +625,9 @@
         }
 
         function drawDetailedTimeline(data) {
-            const container = document.getElementById('illustration-timeline-container'); container.innerHTML = '';
+           const container = document.getElementById('illustration-timeline-container'); container.innerHTML = '';
             const dio = data.rawMaterialDays + data.productionDays; const dso = data.shippingTransitDays + data.customerCreditDays; const dpo = data.dpo; const totalCycleDays = dio + dso;
+            if(totalCycleDays <= 0) return;
             const timelineData = [
                 { name: 'Operational Flow', segments: [ { label: `Raw Material (${data.rawMaterialDays}d)`, duration: data.rawMaterialDays, color: 'from-yellow-300 to-yellow-400' }, { label: `Production (${data.productionDays}d)`, duration: data.productionDays, color: 'from-yellow-400 to-yellow-500' }, { label: `Transit (${data.shippingTransitDays}d)`, duration: data.shippingTransitDays, color: 'from-blue-300 to-blue-400' }, { label: `Credit (${data.customerCreditDays}d)`, duration: data.customerCreditDays, color: 'from-blue-400 to-blue-500' }, ]},
                 { name: 'Financial Flow (AP/AR)', segments: [ { label: `Accounts Payable (DPO: ${dpo}d)`, duration: dpo, color: 'from-green-300 to-green-500' }, { label: `Accounts Receivable (DSO: ${dso}d)`, duration: dso, offset: dio, color: 'from-blue-300 to-blue-500' }, ]},
@@ -542,14 +660,14 @@
             const forecastCtx = document.getElementById('forecastChart').getContext('2d');
             forecastChart = new Chart(forecastCtx, { type: 'line', data: { datasets: []}, options: { responsive: true, maintainAspectRatio: false, scales: { x: { type: 'time', time: { unit: 'month' }, grid: { display: false } }, y: { beginAtZero: true, ticks: { callback: (v) => `₹${(v/100000).toFixed(0)}L` } } }, 
             interaction: {
-                mode: 'index', 
-                intersect: false // This is the fix for the tooltip
+                mode: 'index',
+                intersect: false 
             }, 
             plugins: { tooltip: { callbacks: { label: c => `${c.dataset.label}: ${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(c.parsed.y)}` } }, annotation: { annotations: {} } } } });
         }
 
         function updateChart(chart, data) {
-            const isGrouped = data.type === 'grouped'; chart.options.scales.x.stacked = !isGrouped; chart.options.scales.y.stacked = !isGrouped;
+           const isGrouped = data.type === 'grouped'; chart.options.scales.x.stacked = !isGrouped; chart.options.scales.y.stacked = !isGrouped;
             if (isGrouped) {
                 chart.data.labels = ['Unhedged', 'Hedged']; chart.data.datasets = [ { label: 'Net Realization', data: [data.unhedged.net, data.hedged.net], backgroundColor: '#85583F' }, { label: 'Total Costs', data: [data.unhedged.costs, data.hedged.costs], backgroundColor: '#F3EADD' } ];
             } else {
@@ -561,118 +679,275 @@
             chart.update();
         }
 
-        function renderPortfolioSimulation() {
-            const addDays = (date, days) => { const result = new Date(date); result.setDate(result.getDate() + days); return result; };
-            const formatDate = (date) => date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-            const formatCurrency = (num) => `₹${(num / 100000).toFixed(1)}L`;
-            const simStartDate = new Date('2025-10-01');
-            baseSimData = [
-                { name: 'Case 1: USD', startDate: new Date('2025-10-01'), ...caseStudiesData[0] }, { name: 'Case 2: EUR', startDate: new Date('2025-10-10'), ...caseStudiesData[1] }, { name: 'Case 3: GBP', startDate: new Date('2025-10-22'), ...caseStudiesData[2] }, { name: 'Case 4: JPY', startDate: new Date('2025-11-05'), ...caseStudiesData[3] }, { name: 'Case 5: AUD', startDate: new Date('2025-11-15'), ...caseStudiesData[4] }
-            ];
+        // --- Dynamic Portfolio Simulation Functions ---
+        function initializeDynamicSimulation() {
+            const today = new Date();
+            const todayStr = today.toISOString().split('T')[0];
+            document.getElementById('sim-start-date').value = todayStr;
             
-            const setupTable = document.getElementById('simulation-setup-table'); setupTable.innerHTML = '';
-            baseSimData.forEach(order => {
-                const ill = order.illustration; const dio = ill.rawMaterialDays + ill.productionDays; const dso = ill.shippingTransitDays + ill.customerCreditDays; const ccc = dio + dso - ill.dpo;
-                const cashOutDate = addDays(order.startDate, ill.dpo); const cashInDate = addDays(order.startDate, dio + dso);
-                const row = `<tr><td class="px-4 py-3 font-medium text-gray-900">${order.name}</td><td class="px-4 py-3">${formatDate(order.startDate)}</td><td class="px-4 py-3">${formatDate(cashOutDate)}</td><td class="px-4 py-3">${formatDate(cashInDate)}</td><td class="px-4 py-3 font-semibold">${ccc} days</td><td class="px-4 py-3 font-semibold text-red-600">${formatCurrency(ill.cogs)}</td></tr>`;
-                setupTable.innerHTML += row;
+            const startDates = [
+                new Date('2025-10-01'), new Date('2025-10-10'), new Date('2025-10-22'), new Date('2025-11-05'), new Date('2025-11-15')
+            ];
+
+            userPortfolio = caseStudiesData.map((study, index) => {
+                const ill = study.illustration;
+                const margin = ((ill.invoiceValue - ill.cogs) / ill.invoiceValue) * 100;
+                return {
+                    name: study.title,
+                    startDate: startDates[index],
+                    invoiceValue: ill.invoiceValue,
+                    margin: isFinite(margin) ? margin : 25, // Default margin if invoiceValue is 0
+                    cogs: ill.cogs,
+                    dpo: ill.dpo,
+                    dio: ill.rawMaterialDays + ill.productionDays,
+                    dso: ill.shippingTransitDays + ill.customerCreditDays
+                };
+            });
+            renderDynamicSimulation();
+        }
+
+        function addOrderToPortfolio() {
+            const name = document.getElementById('sim-order-name').value || `Order ${userPortfolio.length + 1}`;
+            const startDate = new Date(document.getElementById('sim-start-date').value);
+            const invoiceValue = parseFloat(document.getElementById('sim-invoice-value').value);
+            const margin = parseFloat(document.getElementById('sim-margin').value);
+            const dpo = parseInt(document.getElementById('sim-dpo').value);
+            const dio = parseInt(document.getElementById('sim-dio').value);
+            const dso = parseInt(document.getElementById('sim-dso').value);
+
+            if (isNaN(invoiceValue) || isNaN(margin) || isNaN(dpo) || isNaN(dio) || isNaN(dso) || !startDate.getTime()) {
+                alert('Please fill in all fields with valid data.');
+                return;
+            }
+
+            const cogs = invoiceValue * (1 - (margin / 100));
+
+            userPortfolio.push({ name, startDate, invoiceValue, margin, cogs, dpo, dio, dso });
+            userPortfolio.sort((a,b) => new Date(a.startDate) - new Date(b.startDate));
+            renderDynamicSimulation();
+            document.getElementById('add-order-form').reset();
+            const todayStr = new Date().toISOString().split('T')[0];
+            document.getElementById('sim-start-date').value = todayStr;
+        }
+
+        function renderDynamicSimulation() {
+            const tableBody = document.getElementById('simulation-order-table');
+            tableBody.innerHTML = '';
+            const formatDate = (date) => date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+            const formatCurrency = (num) => new Intl.NumberFormat('en-IN', {style: 'currency', currency: 'INR', maximumFractionDigits: 0}).format(num);
+            const addDays = (date, days) => { const result = new Date(date); result.setDate(result.getDate() + days); return result; };
+
+            if (userPortfolio.length === 0) {
+                cashFlowChart.data.datasets = [];
+                cashFlowChart.update();
+                document.getElementById('peak-funding').textContent = formatCurrency(0);
+                runForecast();
+                return;
+            }
+
+            userPortfolio.forEach((order, index) => {
+                const cashOutDate = addDays(new Date(order.startDate), order.dpo);
+                const cashInDate = addDays(new Date(order.startDate), order.dio + order.dso);
+                const ccc = order.dio + order.dso - order.dpo;
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-4 py-3 font-medium text-gray-900">${order.name}</td>
+                    <td class="px-4 py-3">${formatDate(cashOutDate)}</td>
+                    <td class="px-4 py-3">${formatDate(cashInDate)}</td>
+                    <td class="px-4 py-3 font-semibold">${ccc} days</td>
+                    <td class="px-4 py-3 font-semibold text-red-600">${formatCurrency(order.cogs)}</td>
+                    <td class="px-4 py-3"><button data-index="${index}" class="remove-order-btn text-red-500 hover:text-red-700 font-bold">Remove</button></td>
+                `;
+                tableBody.appendChild(row);
+            });
+            
+            document.querySelectorAll('.remove-order-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    userPortfolio.splice(e.target.dataset.index, 1);
+                    renderDynamicSimulation();
+                });
             });
 
-            const ganttContainer = document.getElementById('gantt-chart-container'); ganttContainer.innerHTML = '';
-            const totalSimDays = 180;
-            baseSimData.forEach(order => {
-                const ill = order.illustration; const dio = ill.rawMaterialDays + ill.productionDays; const dso = ill.shippingTransitDays + ill.customerCreditDays;
-                const dpoStartOffset = (order.startDate - simStartDate) / (1000 * 3600 * 24);
-                const dpoWidth = (ill.dpo / totalSimDays) * 100; const cccWidth = ((dio + dso - ill.dpo) / totalSimDays) * 100; const dpoOffset = (dpoStartOffset / totalSimDays) * 100;
-                const orderRow = document.createElement('div');
-                orderRow.innerHTML = `<p class="mb-1">${order.name}</p><div class="w-full h-6 bg-gray-200 rounded-full relative"><div class="absolute h-full bg-green-500 rounded-l-full" style="left: ${dpoOffset}%; width: ${dpoWidth}%;"></div><div class="absolute h-full bg-red-500 rounded-r-full" style="left: ${dpoOffset + dpoWidth}%; width: ${cccWidth}%;"></div></div>`;
-                ganttContainer.appendChild(orderRow);
-            });
-            
-            const { cashFlowData, peakFunding } = calculateCashFlow(baseSimData, simStartDate);
+            const { cashFlowData, peakFunding } = calculateCashFlow(userPortfolio);
             
             document.getElementById('peak-funding').textContent = formatCurrency(peakFunding);
             cashFlowChart.data.datasets = [{ data: cashFlowData, borderColor: '#DC2626', backgroundColor: 'rgba(239, 68, 68, 0.1)', fill: true, tension: 0.1, pointRadius: 0, pointHoverRadius: 5 }];
             cashFlowChart.update();
+            runForecast(); 
         }
         
-        function calculateCashFlow(portfolioData, simStartDate, duration = 180) {
+        function calculateCashFlow(portfolio) {
+            if (portfolio.length === 0) return { cashFlowData: [], peakFunding: 0 };
+            
             const addDays = (date, days) => { const result = new Date(date); result.setDate(result.getDate() + days); return result; };
             const cashFlowEvents = [];
-            portfolioData.forEach(order => {
-                const gross = parseFloat(order.analysis.find(r => r.label.includes("Gross Realization")).value.replace(/[^\d.]/g, ''));
-                cashFlowEvents.push({ date: addDays(order.startDate, order.illustration.dpo), amount: -order.illustration.cogs });
-                cashFlowEvents.push({ date: addDays(order.startDate, order.illustration.rawMaterialDays + order.illustration.productionDays + order.illustration.shippingTransitDays + order.illustration.customerCreditDays), amount: gross });
+            portfolio.forEach(order => {
+                const startDate = new Date(order.startDate);
+                cashFlowEvents.push({ date: addDays(startDate, order.dpo), amount: -order.cogs });
+                cashFlowEvents.push({ date: addDays(startDate, order.dpo + order.dio + order.dso), amount: order.invoiceValue });
             });
             cashFlowEvents.sort((a, b) => a.date - b.date);
 
             let cumulative = 0; let peakFunding = 0;
+            const simStartDate = new Date(portfolio[0].startDate);
             const cashFlowData = [{x: simStartDate, y: 0}];
+            let lastDate = simStartDate;
+
             cashFlowEvents.forEach(event => {
-                cashFlowData.push({ x: new Date(event.date.getTime() - 1), y: -Math.min(0, cumulative) });
+                if (event.date > lastDate) {
+                     cashFlowData.push({ x: new Date(event.date.getTime() - 1), y: -Math.min(0, cumulative) });
+                }
                 cumulative += event.amount;
                 cashFlowData.push({ x: event.date, y: -Math.min(0, cumulative) });
                 if (-cumulative > peakFunding) peakFunding = -cumulative;
+                lastDate = event.date;
             });
-            cashFlowData.push({x: addDays(simStartDate, duration), y: cashFlowData[cashFlowData.length-1].y});
-            
-            let peakStartDate = null, peakEndDate = null;
-            if (peakFunding > 0) {
-                const peakPoints = cashFlowData.filter(p => p.y >= peakFunding * 0.999); 
-                if (peakPoints.length > 0) {
-                    peakStartDate = peakPoints[0].x;
-                    peakEndDate = peakPoints[peakPoints.length - 1].x;
-                }
+
+            if (cashFlowEvents.length > 0) {
+                 const finalDate = cashFlowEvents[cashFlowEvents.length - 1].date;
+                 cashFlowData.push({x: addDays(finalDate, 30), y: cashFlowData[cashFlowData.length-1].y});
             }
-            return { cashFlowData, peakFunding, peakStartDate, peakEndDate };
+            
+            return { cashFlowData, peakFunding };
         }
         
+        function updateSliderDisplay() {
+            const salesGrowth = document.getElementById('salesGrowth').value;
+            document.getElementById('salesGrowthValue').textContent = `${salesGrowth > 0 ? '+' : ''}${salesGrowth}%`;
+            document.getElementById('avgDIOValue').textContent = `${document.getElementById('avgDIO').value} Days`;
+            document.getElementById('avgDSOValue').textContent = `${document.getElementById('avgDSO').value} Days`;
+            document.getElementById('avgDPOValue').textContent = `${document.getElementById('avgDPO').value} Days`;
+        }
+
         function runForecast() {
-            const salesGrowth = parseInt(document.getElementById('salesGrowth').value); const avgDIO = parseInt(document.getElementById('avgDIO').value); const avgDSO = parseInt(document.getElementById('avgDSO').value); const avgDPO = parseInt(document.getElementById('avgDPO').value);
-            const formatDate = (date) => date ? date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : 'N/A';
-            const formatCurrency = (num) => `₹${(num / 100000).toFixed(1)}L`;
-
-            document.getElementById('salesGrowthValue').textContent = `${salesGrowth > 0 ? '+' : ''}${salesGrowth}%`; document.getElementById('avgDIOValue').textContent = `${avgDIO} Days`; document.getElementById('avgDSOValue').textContent = `${avgDSO} Days`; document.getElementById('avgDPOValue').textContent = `${avgDPO} Days`;
-
-            const forecastData = JSON.parse(JSON.stringify(baseSimData));
+            updateSliderDisplay();
+            
+            if (userPortfolio.length === 0) {
+                forecastChart.data.datasets = [];
+                forecastChart.update();
+                return;
+            }
+            
+            const salesGrowth = parseInt(document.getElementById('salesGrowth').value);
+            const avgDIO = parseInt(document.getElementById('avgDIO').value);
+            const avgDSO = parseInt(document.getElementById('avgDSO').value);
+            const avgDPO = parseInt(document.getElementById('avgDPO').value);
+            
+            const basePortfolio = JSON.parse(JSON.stringify(userPortfolio));
+            const forecastPortfolio = JSON.parse(JSON.stringify(userPortfolio));
             const growthMultiplier = 1 + (salesGrowth / 100);
 
-            forecastData.forEach(order => {
-                order.illustration.cogs *= growthMultiplier;
-                order.analysis.forEach(line => { if (line.value.includes("INR")) { const numValue = parseFloat(line.value.replace(/[^\d.]/g, '')); line.value = `INR ${Math.round(numValue * growthMultiplier).toLocaleString('en-IN')}`; } });
-                const dioRatio = (order.illustration.rawMaterialDays / (order.illustration.rawMaterialDays + order.illustration.productionDays)); order.illustration.rawMaterialDays = Math.round(avgDIO * dioRatio); order.illustration.productionDays = Math.round(avgDIO * (1 - dioRatio));
-                const dsoRatio = (order.illustration.shippingTransitDays / (order.illustration.shippingTransitDays + order.illustration.customerCreditDays)); order.illustration.shippingTransitDays = Math.round(avgDSO * dsoRatio); order.illustration.customerCreditDays = Math.round(avgDSO * (1 - dsoRatio));
-                order.illustration.dpo = avgDPO; order.startDate = new Date(order.startDate);
+            forecastPortfolio.forEach(order => {
+                order.invoiceValue *= growthMultiplier;
+                order.cogs *= growthMultiplier;
+                order.dio = avgDIO;
+                order.dso = avgDSO;
+                order.dpo = avgDPO;
             });
             
-            const { cashFlowData: baseCashFlow } = calculateCashFlow(baseSimData, new Date('2025-10-01'));
-            const { cashFlowData: forecastCashFlow, peakFunding: forecastPeak, peakStartDate, peakEndDate } = calculateCashFlow(forecastData, new Date('2025-10-01'));
+            const { cashFlowData: baseCashFlow } = calculateCashFlow(basePortfolio);
+            const { cashFlowData: forecastCashFlow } = calculateCashFlow(forecastPortfolio);
             
-            document.getElementById('forecast-peak-funding').textContent = formatCurrency(forecastPeak);
-            if (peakStartDate && peakEndDate && peakStartDate <= peakEndDate) {
-                const duration = Math.round((peakEndDate.getTime() - peakStartDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
-                document.getElementById('forecast-peak-period').textContent = `${formatDate(peakStartDate)} - ${formatDate(peakEndDate)}`;
-                document.getElementById('forecast-peak-duration').textContent = `${duration} Day${duration > 1 ? 's' : ''}`;
-            } else {
-                 document.getElementById('forecast-peak-period').textContent = 'N/A';
-                 document.getElementById('forecast-peak-duration').textContent = '0 Days';
-            }
-            
-            let annotations = {};
-            if(peakStartDate && peakEndDate && peakStartDate <= peakEndDate) {
-                 annotations.peakPeriod = { type: 'box', xMin: peakStartDate.valueOf(), xMax: peakEndDate.valueOf(), backgroundColor: 'rgba(224, 231, 255, 0.5)', borderColor: 'rgba(59, 130, 246, 0.5)', borderWidth: 1 };
-            }
-            if(forecastChart.options.plugins.annotation) {
-                forecastChart.options.plugins.annotation.annotations = annotations;
-            }
-
-            forecastChart.data.datasets = [
+            let datasets = [
                 { label: 'Baseline', data: baseCashFlow, borderColor: '#9CA3AF', tension: 0.1, pointRadius: 0, borderDash: [5, 5] },
-                { label: 'Forecast', data: forecastCashFlow, borderColor: '#3B82F6', backgroundColor: 'rgba(59, 130, 246, 0.1)', fill: true, tension: 0.1, pointRadius: 0 }
+                { label: 'Current Forecast', data: forecastCashFlow, borderColor: '#3B82F6', backgroundColor: 'rgba(59, 130, 246, 0.1)', fill: true, tension: 0.1, pointRadius: 0 }
             ];
+
+            const colors = ['#16A34A', '#D97706', '#9333EA', '#ca8a04', '#0891b2'];
+            savedScenarios.forEach((scenario, index) => {
+                if(scenario.active) {
+                    datasets.push({
+                        label: scenario.name,
+                        data: scenario.data,
+                        borderColor: colors[index % colors.length],
+                        tension: 0.1,
+                        pointRadius: 0,
+                    });
+                }
+            });
+
+            forecastChart.data.datasets = datasets;
             forecastChart.update();
         }
 
+        function saveScenario() {
+            if (userPortfolio.length === 0) {
+                alert("Please add orders to the Portfolio Simulation first.");
+                return;
+            }
+
+            const nameInput = document.getElementById('scenarioName');
+            let name = nameInput.value.trim();
+            if (!name) {
+                name = `Scenario ${savedScenarios.length + 1}`;
+            }
+            
+            const salesGrowth = parseInt(document.getElementById('salesGrowth').value);
+            const avgDIO = parseInt(document.getElementById('avgDIO').value);
+            const avgDSO = parseInt(document.getElementById('avgDSO').value);
+            const avgDPO = parseInt(document.getElementById('avgDPO').value);
+
+            const forecastPortfolio = JSON.parse(JSON.stringify(userPortfolio));
+            const growthMultiplier = 1 + (salesGrowth / 100);
+
+            forecastPortfolio.forEach(order => {
+                order.invoiceValue *= growthMultiplier;
+                order.cogs *= growthMultiplier;
+                order.dio = avgDIO;
+                order.dso = avgDSO;
+                order.dpo = avgDPO;
+            });
+            
+            const { cashFlowData } = calculateCashFlow(forecastPortfolio);
+
+            savedScenarios.push({
+                name: name,
+                params: { salesGrowth, avgDIO, avgDSO, avgDPO },
+                data: cashFlowData,
+                active: true
+            });
+            
+            nameInput.value = '';
+            updateScenarioList();
+            runForecast();
+        }
+
+        function updateScenarioList() {
+            const listEl = document.getElementById('scenario-list');
+            listEl.innerHTML = '';
+            savedScenarios.forEach((scenario, index) => {
+                const itemEl = document.createElement('div');
+                itemEl.className = 'flex items-center justify-between bg-white p-2 rounded-md';
+                itemEl.innerHTML = `
+                    <div class="flex items-center">
+                        <input type="checkbox" id="scenario-toggle-${index}" class="mr-2 h-4 w-4" ${scenario.active ? 'checked' : ''}>
+                        <div>
+                            <label for="scenario-toggle-${index}" class="font-semibold text-sm">${scenario.name}</label>
+                            <p class="text-xs text-gray-500">SG: ${scenario.params.salesGrowth}%, DIO: ${scenario.params.avgDIO}, DSO: ${scenario.params.avgDSO}, DPO: ${scenario.params.avgDPO}</p>
+                        </div>
+                    </div>
+                    <button data-index="${index}" class="remove-scenario-btn text-red-500 hover:text-red-700 font-bold text-sm">Remove</button>
+                `;
+                listEl.appendChild(itemEl);
+            });
+
+            listEl.querySelectorAll('input[type="checkbox"]').forEach((checkbox, index) => {
+                checkbox.addEventListener('change', () => {
+                    savedScenarios[index].active = checkbox.checked;
+                    runForecast();
+                });
+            });
+
+            listEl.querySelectorAll('.remove-scenario-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const index = parseInt(button.dataset.index);
+                    savedScenarios.splice(index, 1);
+                    updateScenarioList();
+                    runForecast();
+                });
+            });
+        }
+        
         function calculateCustomCCC() {
             const sales = parseFloat(document.getElementById('calc-sales').value) || 0;
             const cogs = parseFloat(document.getElementById('calc-cogs').value) || 0;
@@ -685,6 +960,8 @@
             const dpo = cogs > 0 ? (ap / cogs) * 365 : 0;
             const ccc = dio + dso - dpo;
             const fundingGap = (ar + inventory) - ap;
+            
+            const formatCurrency = (num) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(num);
 
             document.getElementById('calc-dio-result').textContent = `${dio.toFixed(1)}`;
             document.getElementById('calc-dso-result').textContent = `${dso.toFixed(1)}`;
@@ -698,7 +975,61 @@
                 <span class="text-gray-500 text-lg mx-1">=</span>
                 <span class="text-red-600 text-2xl font-bold">${ccc.toFixed(1)} Days</span>`;
             
-            document.getElementById('calc-funding-gap').textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(fundingGap);
+            document.getElementById('calc-funding-gap').textContent = formatCurrency(fundingGap);
+        }
+
+        function calculateCurrencyRisk() {
+            const amount = parseFloat(document.getElementById('cr-amount').value) || 0;
+            const spot = parseFloat(document.getElementById('cr-spot').value) || 0;
+            const forward = parseFloat(document.getElementById('cr-forward').value) || 0;
+            const futureSpotEl = document.getElementById('cr-future-spot');
+            const futureSpot = parseFloat(futureSpotEl.value) || 0;
+
+            const minRate = spot > 0 ? spot - (spot * 0.05) : 0;
+            const maxRate = spot > 0 ? spot + (spot * 0.05) : 100;
+            futureSpotEl.min = minRate.toFixed(2);
+            futureSpotEl.max = maxRate.toFixed(2);
+            
+            document.getElementById('cr-future-spot-value').textContent = `Simulated Rate: ${futureSpot.toFixed(2)}`;
+
+            const hedgedInr = amount * forward;
+            const unhedgedInr = amount * futureSpot;
+            const difference = hedgedInr - unhedgedInr;
+            
+            const formatCurrency = (num) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(num);
+
+            document.getElementById('cr-hedged-result').textContent = formatCurrency(hedgedInr);
+            document.getElementById('cr-unhedged-result').textContent = formatCurrency(unhedgedInr);
+            
+            const resultEl = document.getElementById('cr-final-result');
+            if (difference > 0) {
+                resultEl.innerHTML = `${formatCurrency(difference)} <span class="text-sm font-semibold text-green-700">(Gain by Hedging)</span>`;
+                resultEl.className = 'text-3xl font-extrabold text-green-600';
+            } else if (difference < 0) {
+                resultEl.innerHTML = `${formatCurrency(Math.abs(difference))} <span class="text-sm font-semibold text-orange-700">(Opportunity Cost)</span>`;
+                resultEl.className = 'text-3xl font-extrabold text-orange-600';
+            } else {
+                resultEl.innerHTML = `No Difference`;
+                resultEl.className = 'text-3xl font-extrabold text-gray-600';
+            }
+        }
+
+        function calculateFinancingCosts() {
+            const amount = parseFloat(document.getElementById('fc-amount').value) || 0;
+            const duration = parseFloat(document.getElementById('fc-duration').value) || 0;
+            const pcRate = parseFloat(document.getElementById('fc-pc-rate').value) || 0;
+            const bdRate = parseFloat(document.getElementById('fc-bd-rate').value) || 0;
+            const odRate = parseFloat(document.getElementById('fc-od-rate').value) || 0;
+            
+            const formatCurrency = (num) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(num);
+
+            const pcCost = (amount * pcRate * duration) / (100 * 365);
+            const bdCost = (amount * bdRate * duration) / (100 * 365);
+            const odCost = (amount * odRate * duration) / (100 * 365);
+
+            document.getElementById('fc-pc-result').textContent = formatCurrency(pcCost);
+            document.getElementById('fc-bd-result').textContent = formatCurrency(bdCost);
+            document.getElementById('fc-od-result').textContent = formatCurrency(odCost);
         }
 
         function showSection(sectionId) {
