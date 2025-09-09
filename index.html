@@ -582,7 +582,7 @@
         }
 
         function setupZohoAccordion() {
-             const accordionContainer = document.getElementById('zoho-accordion');
+            const accordionContainer = document.getElementById('zoho-accordion');
             if(!accordionContainer) return;
             accordionContainer.innerHTML = '';
             zohoGuideData.forEach((item) => {
@@ -691,12 +691,12 @@
 
             userPortfolio = caseStudiesData.map((study, index) => {
                 const ill = study.illustration;
-                const margin = ((ill.invoiceValue - ill.cogs) / ill.invoiceValue) * 100;
+                const margin = ill.invoiceValue > 0 ? ((ill.invoiceValue - ill.cogs) / ill.invoiceValue) * 100 : 25;
                 return {
                     name: study.title,
                     startDate: startDates[index],
                     invoiceValue: ill.invoiceValue,
-                    margin: isFinite(margin) ? margin : 25, // Default margin if invoiceValue is 0
+                    margin: isFinite(margin) ? margin : 25,
                     cogs: ill.cogs,
                     dpo: ill.dpo,
                     dio: ill.rawMaterialDays + ill.productionDays,
@@ -725,7 +725,10 @@
             userPortfolio.push({ name, startDate, invoiceValue, margin, cogs, dpo, dio, dso });
             userPortfolio.sort((a,b) => new Date(a.startDate) - new Date(b.startDate));
             renderDynamicSimulation();
-            document.getElementById('add-order-form').reset();
+            
+            const form = document.getElementById('add-order-form');
+            if (form) form.reset();
+
             const todayStr = new Date().toISOString().split('T')[0];
             document.getElementById('sim-start-date').value = todayStr;
         }
@@ -747,7 +750,7 @@
 
             userPortfolio.forEach((order, index) => {
                 const cashOutDate = addDays(new Date(order.startDate), order.dpo);
-                const cashInDate = addDays(new Date(order.startDate), order.dio + order.dso);
+                const cashInDate = addDays(new Date(order.startDate), order.dpo + order.dio + order.dso);
                 const ccc = order.dio + order.dso - order.dpo;
                 const row = document.createElement('tr');
                 row.innerHTML = `
