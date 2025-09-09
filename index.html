@@ -582,7 +582,7 @@
         }
 
         function setupZohoAccordion() {
-            const accordionContainer = document.getElementById('zoho-accordion');
+             const accordionContainer = document.getElementById('zoho-accordion');
             if(!accordionContainer) return;
             accordionContainer.innerHTML = '';
             zohoGuideData.forEach((item) => {
@@ -726,9 +726,7 @@
             userPortfolio.sort((a,b) => new Date(a.startDate) - new Date(b.startDate));
             renderDynamicSimulation();
             
-            const form = document.getElementById('add-order-form');
-            if (form) form.reset();
-
+            document.getElementById('add-order-form').reset();
             const todayStr = new Date().toISOString().split('T')[0];
             document.getElementById('sim-start-date').value = todayStr;
         }
@@ -750,7 +748,7 @@
 
             userPortfolio.forEach((order, index) => {
                 const cashOutDate = addDays(new Date(order.startDate), order.dpo);
-                const cashInDate = addDays(new Date(order.startDate), order.dpo + order.dio + order.dso);
+                const cashInDate = addDays(new Date(order.startDate), order.dio + order.dso);
                 const ccc = order.dio + order.dso - order.dpo;
                 const row = document.createElement('tr');
                 row.innerHTML = `
@@ -787,7 +785,7 @@
             portfolio.forEach(order => {
                 const startDate = new Date(order.startDate);
                 cashFlowEvents.push({ date: addDays(startDate, order.dpo), amount: -order.cogs });
-                cashFlowEvents.push({ date: addDays(startDate, order.dpo + order.dio + order.dso), amount: order.invoiceValue });
+                cashFlowEvents.push({ date: addDays(startDate, order.dio + order.dso), amount: order.invoiceValue });
             });
             cashFlowEvents.sort((a, b) => a.date - b.date);
 
